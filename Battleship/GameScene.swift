@@ -2,7 +2,7 @@
 //  GameScene.swift
 //  Battleship
 //
-//  Created by Erland Isaksson on 2019-04-28.
+//  Created by Erland Isaksson on 2019-05-01.
 //  Copyright © 2019 Erland Isaksson. All rights reserved.
 //
 
@@ -10,80 +10,62 @@ import SpriteKit
 import GameplayKit
 
 class GameScene: SKScene {
+    let gameBoard: Board
+    var hitTexture: SKTexture?
+    var missTexture: SKTexture?
     
-    private var label : SKLabelNode?
-    private var spinnyNode : SKShapeNode?
+    init(board: Board, size: CGSize) {
+        self.gameBoard = board
+        self.hitTexture = GameScene.createHitTexture(cellSize: gameBoard.cellSize, strokeColor: UIColor.green, fillColor: UIColor.green)
+        self.missTexture = GameScene.createHitTexture(cellSize: gameBoard.cellSize, strokeColor: UIColor.darkGray, fillColor: UIColor.darkGray)
+        super.init(size: size)
+    }
     
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     override func didMove(to view: SKView) {
-        
-        // Get label node from scene and store it for use later
-        self.label = self.childNode(withName: "//helloLabel") as? SKLabelNode
-        if let label = self.label {
-            label.alpha = 0.0
-            label.run(SKAction.fadeIn(withDuration: 2.0))
-        }
-        
-        // Create shape node to use during mouse interaction
-        let w = (self.size.width + self.size.height) * 0.05
-        self.spinnyNode = SKShapeNode.init(rectOf: CGSize.init(width: w, height: w), cornerRadius: w * 0.3)
-        
-        if let spinnyNode = self.spinnyNode {
-            spinnyNode.lineWidth = 2.5
-            
-            spinnyNode.run(SKAction.repeatForever(SKAction.rotate(byAngle: CGFloat(Double.pi), duration: 1)))
-            spinnyNode.run(SKAction.sequence([SKAction.wait(forDuration: 0.5),
-                                              SKAction.fadeOut(withDuration: 0.5),
-                                              SKAction.removeFromParent()]))
-        }
+        print("Moved to game scene")
+        gameBoard.hideShips(hide: true)
+        addChild(gameBoard)
     }
-    
-    
-    func touchDown(atPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.green
-            self.addChild(n)
-        }
-    }
-    
-    func touchMoved(toPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.blue
-            self.addChild(n)
-        }
-    }
-    
-    func touchUp(atPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.red
-            self.addChild(n)
-        }
-    }
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let label = self.label {
-            label.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
+        guard let touch = touches.first else {
+            return
         }
-        
-        for t in touches { self.touchDown(atPoint: t.location(in: self)) }
+        let touchLocation = touch.location(in: self)
+        shoot(position: touchLocation)
     }
     
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchMoved(toPoint: t.location(in: self)) }
+    func shoot(position: CGPoint) {
+        let cellX = Int((position.x-gameBoard.position.x)/gameBoard.cellSize)
+        let cellY = Int((gameBoard.position.y-position.y)/gameBoard.cellSize)
+        if cellX>=0 && cellX<gameBoard.width && cellY>=0 && cellY<gameBoard.height {
+            let selectedShip = gameBoard.shipAtPosition(x: cellX,
+                                                    y: cellY)
+            if selectedShip != nil {
+                let hit = SKSpriteNode(texture: hitTexture)
+                hit.anchorPoint = CGPoint(x: 0, y: 1)
+                hit.position = CGPoint(x: CGFloat(cellX)*gameBoard.cellSize,
+                                       y: -CGFloat(cellY)*gameBoard.cellSize)
+                gameBoard.addChild(hit)
+            }else {
+                let hit = SKSpriteNode(texture: missTexture)
+                hit.anchorPoint = CGPoint(x: 0, y: 1)
+                hit.position = CGPoint(x: CGFloat(cellX)*gameBoard.cellSize,
+                                       y: -CGFloat(cellY)*gameBoard.cellSize)
+                gameBoard.addChild(hit)
+            }
+        }
     }
     
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
+    private class func createHitTexture(cellSize: CGFloat, strokeColor: UIColor, fillColor: UIColor) -> SKTexture? {
+        let size = (cellSize-cellSize/10.0)
+        let shape = SKShapeNode.init(circleOfRadius: size/2.0)
+        shape.fillColor = fillColor
+        shape.strokeColor = strokeColor
+        let view = SKView(frame: CGRect(x: 0, y: 0, width: size, height: size))
+        return view.texture(from: shape)
     }
-    
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
-    }
-    
-    
-    override func update(_ currentTime: TimeInterval) {
-        // Called before each frame is rendered
-    }
+
 }

@@ -10,26 +10,22 @@ import UIKit
 import SpriteKit
 import GameplayKit
 
-class GameViewController: UIViewController {
+class GameViewController: UIViewController, BattleshipDelegate {
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let view = self.view as! SKView? {
-            // Load the SKScene from 'GameScene.sks'
-            if let scene = SKScene(fileNamed: "GameScene") {
-                // Set the scale mode to scale to fit the window
-                scene.scaleMode = .aspectFill
-                
-                // Present the scene
-                view.presentScene(scene)
-            }
-            
-            view.ignoresSiblingOrder = true
-            
-            view.showsFPS = true
-            view.showsNodeCount = true
-        }
+        // Configure the view.
+        let skView = view as! SKView
+        skView.isMultipleTouchEnabled = false
+        
+        // Create and configure the scene.
+        let scene = PlacementScene(delegate: self, size: skView.bounds.size)
+        scene.scaleMode = .aspectFill
+        
+        // Present the scene.
+        skView.presentScene(scene)
     }
 
     override var shouldAutorotate: Bool {
@@ -46,5 +42,16 @@ class GameViewController: UIViewController {
 
     override var prefersStatusBarHidden: Bool {
         return true
+    }
+    
+    func placementComplete(board: Board) {
+        let skView = view as! SKView
+        // Create and configure the scene.
+        board.removeFromParent()
+        let scene = GameScene(board: board, size: skView.bounds.size)
+        scene.scaleMode = .aspectFill
+        
+        // Present the scene.
+        skView.presentScene(scene)
     }
 }
