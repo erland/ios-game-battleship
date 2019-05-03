@@ -7,5 +7,10 @@
 //
 
 protocol BattleshipDelegate {
+    func selectedOpponent(player: String)
     func placementComplete(board: Board)
+    func gameOver(board: Board, won: Bool)
+    func finishedGame()
+    func shoot(playerName: String, x: Int, y: Int)
+    func shootResult(playerName: String, x: Int, y: Int, hit: Bool)
 }

@@ -8,7 +8,8 @@
 
 import SpriteKit
 
-class BoardView : SKSpriteNode {
+class BoardView : SKSpriteNode, BoardObserver {
+    
     let board: Board
     let cellSize: CGFloat
     
@@ -20,6 +21,7 @@ class BoardView : SKSpriteNode {
         let boardWidth = CGFloat(board.width)*cellSize
         let boardHeight = CGFloat(board.width)*cellSize
         super.init(texture: texture, color: UIColor.black, size: CGSize(width: boardWidth, height: boardHeight))
+        board.attachObserver(observer: self)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -59,5 +61,43 @@ class BoardView : SKSpriteNode {
         lineShape.path = path
         return lineShape
     }
+    
+    func hideShips(hide: Bool) {
+        enumerateChildNodes(withName: "ship") {
+            (node, stop) in
+            if hide {
+                node.alpha = 0.5
+            }else {
+                node.alpha = 1
+            }
+        }
+    }
 
+    func shipAdded(ship: Ship) {
+        let shipView = ShipView(ship: ship, cellSize: cellSize)
+        shipView.anchorPoint = CGPoint(x: 1.0/(CGFloat(ship.length)*2.0), y: 0.5)
+        shipView.name = "ship"
+        addChild(shipView)
+    }
+    
+    func shipRemoved(ship: Ship) {
+        if let shipView = viewForShip(ship: ship) {
+            shipView.removeFromParent()
+        }
+    }
+
+    func viewForShip(ship: Ship) -> ShipView? {
+        var result: ShipView?
+        enumerateChildNodes(withName: "ship") {
+            (node, stop) in
+            if node is ShipView {
+                let shipView  = node as! ShipView
+                if shipView.ship === ship {
+                    result = shipView
+                }
+            }
+        }
+        return result
+    }
 }
+

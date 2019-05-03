@@ -8,56 +8,86 @@
 
 import SpriteKit
 
-class Ship : SKSpriteNode {
+protocol ShipObserver {
+    func shipUpdated(ship: Ship)
+}
+class Ship : Hashable {
     let length: Int
-    let cellSize: CGFloat
-    let selectedTexture: SKTexture?
-    let mainTexture: SKTexture?
+    var observers: [ShipObserver] = []
+    var hits:Array<Bool>
+
+    enum Orientation: Int {
+        case Horizontal=0, Vertical
+    }
     
-    init(length: Int, cellSize: CGFloat) {
+    init(length: Int) {
         self.length = length
-        self.cellSize = cellSize
-        self.mainTexture = Ship.createShipTexture(length: length, cellSize: cellSize, borderColor: UIColor.yellow, fillColor: UIColor.lightGray)
-        self.selectedTexture = Ship.createShipTexture(length: length, cellSize: cellSize, borderColor: UIColor.red, fillColor: UIColor.white)
-        super.init(texture: mainTexture, color: UIColor.black, size: CGSize(width: CGFloat(length)*cellSize, height: cellSize))
-        
-        anchorPoint = CGPoint(x: 0, y: 1)
+        self.x = 0
+        self.y = 0
+        self.orientation = Orientation.Horizontal
+        self.hits = Array(repeating: false, count: length)
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    func attachObserver(observer: ShipObserver) {
+        observers.append(observer)
     }
     
-    private class func createShipTexture(length: Int, cellSize: CGFloat, borderColor: UIColor, fillColor: UIColor) -> SKTexture? {
-        let shape = SKShapeNode.init(rectOf: CGSize(width: CGFloat(length)*cellSize,
-                                                    height: cellSize), cornerRadius: cellSize/4)
-        shape.fillColor = fillColor
-        shape.strokeColor = borderColor
-        
-        let view = SKView(frame: CGRect(x: 0, y: 0, width: CGFloat(length)*cellSize, height: cellSize))
-        return view.texture(from: shape)
-    }
-    
-    var selected: Bool {
-        set(newState) {
-            if newState {
-                texture = selectedTexture
-            }else {
-                texture = mainTexture
+    func shoot(x: Int, y: Int) -> Bool {
+        var result: Bool = false
+        if orientation==Orientation.Horizontal {
+            if y==self.y && x>=self.x && x < self.x+length {
+                hits[x-self.x] = true
+                result = true
+            }
+        }else {
+            if x==self.x && y>self.y-length && y <= self.y {
+                hits[self.y-y] = true
+                result = true
             }
         }
-        get {
-            return texture == mainTexture
+        notifyObservers()
+        return result
+    }
+    
+    func isDestroyed() -> Bool {
+        for hit in hits {
+            if !hit {
+                return false
+            }
+        }
+        return true
+    }
+    
+    private func notifyObservers() {
+        for observer in observers {
+            observer.shipUpdated(ship: self)
         }
     }
     var x: Int {
-        get {
-            return Int(position.x/cellSize)
+        didSet {
+            notifyObservers()
         }
     }
     var y: Int {
-        get {
-            return Int(-position.y/cellSize)
+        didSet {
+            notifyObservers()
         }
     }
+    var orientation: Orientation {
+        didSet {
+            notifyObservers()
+        }
+    }
+    var selected: Bool = false {
+        didSet {
+            notifyObservers()
+        }
+    }
+    static func == (lhs: Ship, rhs: Ship) -> Bool {
+        return lhs === rhs
+    }
+    var hashValue: Int {
+        return x.hashValue ^ y.hashValue
+    }
 }
+
