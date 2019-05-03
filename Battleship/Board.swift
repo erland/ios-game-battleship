@@ -68,7 +68,7 @@ class Board {
             ship.y = y;
         }
         addShipToBoard(ship: ship)
-        debugBoard()
+        //debugBoard()
     }
         
     func validateNewPosition(ship: Ship, x: Int, y: Int, orientation: Ship.Orientation) -> Bool {

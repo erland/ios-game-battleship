@@ -61,7 +61,7 @@ class AIPlayer : Player {
         }
 
         if position == nil {
-            if lastHit!.y>0 {
+            if nearbyY>0 {
                 if shoots![nearbyX, nearbyY-1] == nil {
                     position = Position(x: nearbyX, y: nearbyY-1)
                 }
