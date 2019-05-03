@@ -11,8 +11,7 @@ class AIPlayer : Player {
     var myBoard : Board?
     let playerName: String
     var shoots: Array2D<Bool>?
-    var lastHitX: Int?
-    var lastHitY: Int?
+    var lastHit: Position?
     init(name: String) {
         playerName = name
     }
@@ -25,10 +24,8 @@ class AIPlayer : Player {
                 let orientation = Ship.Orientation(rawValue: Int.random(in: 0...1))
                 placed = board.validateNewPosition(ship: ship, x: x, y: y, orientation: orientation!)
                 if placed {
+                    ship.orientation = orientation!
                     board.addShip(ship: ship, x: x, y: y)
-                    if orientation == Ship.Orientation.Vertical {
-                        board.rotateShip(ship: ship)
-                    }
                 }
             }while !placed
         }
@@ -64,7 +61,7 @@ class AIPlayer : Player {
         }
 
         if position == nil {
-            if lastHitY!>0 {
+            if lastHit!.y>0 {
                 if shoots![nearbyX, nearbyY-1] == nil {
                     position = Position(x: nearbyX, y: nearbyY-1)
                 }
@@ -87,8 +84,8 @@ class AIPlayer : Player {
         if let board = opponentBoard {
             var position: Position?
             
-            if lastHitX != nil {
-                position = getNearbyCandidate(nearbyX: lastHitX!, nearbyY: lastHitY!)
+            if lastHit != nil {
+                position = getNearbyCandidate(nearbyX: lastHit!.x, nearbyY: lastHit!.y)
             }
             if position == nil {
                 for cellX in 0..<board.width {
@@ -119,8 +116,7 @@ class AIPlayer : Player {
     func shootResult(x: Int, y: Int, hit: Bool) {
         shoots?[x,y] = hit
         if hit {
-            lastHitX = x
-            lastHitY = y
+            lastHit = Position(x: x, y: y)
         }
     }
 
