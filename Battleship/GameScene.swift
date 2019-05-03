@@ -75,7 +75,7 @@ class GameScene: SKScene {
     func shoot(x: Int, y: Int) {
         var result: Bool = false
         if x>=0 && x<myBoardView.board.width && y>=0 && y<myBoardView.board.height {
-            result = processShoot(boardView: myBoardView, x: x, y: y, won: false)
+            result = processShoot(boardView: myBoardView, x: x, y: y, small: true, won: false)
         }
         battleshipDelegate.shootResult(playerName: myBoardView.board.name, x: x, y: y, hit: result)
     }
@@ -94,16 +94,16 @@ class GameScene: SKScene {
     }
     
     func shootResult(x: Int, y: Int, hit: Bool) {
-        processShoot(boardView: opponentBoardView, x: x, y: y, won: true)
+        processShoot(boardView: opponentBoardView, x: x, y: y, small: false, won: true)
     }
 
-    private func processShoot(boardView: BoardView, x: Int, y: Int, won: Bool) -> Bool {
+    private func processShoot(boardView: BoardView, x: Int, y: Int, small: Bool, won: Bool) -> Bool {
         let selectedShip = boardView.board.shipAtPosition(x: x,
                                                                   y: y)
         if let selectedShip = selectedShip {
             if selectedShip.shoot(x: x, y: y) {
                 var texture: SKTexture? = self.hitTexture
-                if !won {
+                if small {
                     texture = smallHitTexture
                 }
                 let hit = SKSpriteNode(texture: texture!)
@@ -117,7 +117,7 @@ class GameScene: SKScene {
                     }
                 }
                 if boardView.board.isAllShipsDestroyed() {
-                    battleshipDelegate.gameOver(board: opponentBoardView.board, won: true)
+                    battleshipDelegate.gameOver(board: opponentBoardView.board, won: won)
                 }
                 return true
             }
