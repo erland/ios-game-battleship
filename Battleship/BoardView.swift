@@ -66,7 +66,7 @@ class BoardView : SKSpriteNode, BoardObserver {
         enumerateChildNodes(withName: "ship") {
             (node, stop) in
             if hide {
-                node.alpha = 0.5
+                node.alpha = 0
             }else {
                 node.alpha = 1
             }
