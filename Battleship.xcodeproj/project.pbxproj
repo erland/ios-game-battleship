@@ -25,9 +25,10 @@
 		DCC84C9A2279D3A800BA0668 /* GameOverScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC84C992279D3A800BA0668 /* GameOverScene.swift */; };
 		DCC84C9C2279EF7100BA0668 /* MatchMakingScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC84C9B2279EF7100BA0668 /* MatchMakingScene.swift */; };
 		DCC84C9E2279FC8300BA0668 /* CommandDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC84C9D2279FC8300BA0668 /* CommandDelegate.swift */; };
-		DCC84CA0227A090500BA0668 /* NetworkOpponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC84C9F227A090500BA0668 /* NetworkOpponent.swift */; };
+		DCC84CA0227A090500BA0668 /* LocalNetworking.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC84C9F227A090500BA0668 /* LocalNetworking.swift */; };
 		DCC84CA2227A0EA000BA0668 /* AIPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC84CA1227A0EA000BA0668 /* AIPlayer.swift */; };
 		DCC84CA4227A0EB100BA0668 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC84CA3227A0EB100BA0668 /* Player.swift */; };
+		DCC84CA6227D648000BA0668 /* NetworkPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC84CA5227D648000BA0668 /* NetworkPlayer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,9 +52,10 @@
 		DCC84C992279D3A800BA0668 /* GameOverScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverScene.swift; sourceTree = "<group>"; };
 		DCC84C9B2279EF7100BA0668 /* MatchMakingScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchMakingScene.swift; sourceTree = "<group>"; };
 		DCC84C9D2279FC8300BA0668 /* CommandDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandDelegate.swift; sourceTree = "<group>"; };
-		DCC84C9F227A090500BA0668 /* NetworkOpponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkOpponent.swift; sourceTree = "<group>"; };
+		DCC84C9F227A090500BA0668 /* LocalNetworking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNetworking.swift; sourceTree = "<group>"; };
 		DCC84CA1227A0EA000BA0668 /* AIPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIPlayer.swift; sourceTree = "<group>"; };
 		DCC84CA3227A0EB100BA0668 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
+		DCC84CA5227D648000BA0668 /* NetworkPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkPlayer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,9 +107,10 @@
 				DCC84C992279D3A800BA0668 /* GameOverScene.swift */,
 				DCC84C9B2279EF7100BA0668 /* MatchMakingScene.swift */,
 				DCC84C9D2279FC8300BA0668 /* CommandDelegate.swift */,
-				DCC84C9F227A090500BA0668 /* NetworkOpponent.swift */,
+				DCC84C9F227A090500BA0668 /* LocalNetworking.swift */,
 				DCC84CA1227A0EA000BA0668 /* AIPlayer.swift */,
 				DCC84CA3227A0EB100BA0668 /* Player.swift */,
+				DCC84CA5227D648000BA0668 /* NetworkPlayer.swift */,
 			);
 			path = Battleship;
 			sourceTree = "<group>";
@@ -193,10 +196,11 @@
 				DCC84C922278038400BA0668 /* Ship.swift in Sources */,
 				DCC84C9A2279D3A800BA0668 /* GameOverScene.swift in Sources */,
 				DCC84C9E2279FC8300BA0668 /* CommandDelegate.swift in Sources */,
+				DCC84CA6227D648000BA0668 /* NetworkPlayer.swift in Sources */,
 				DCC84C9C2279EF7100BA0668 /* MatchMakingScene.swift in Sources */,
 				DCC84C862276B28600BA0668 /* Block.swift in Sources */,
 				DCC84C2D2275EA2B00BA0668 /* GameViewController.swift in Sources */,
-				DCC84CA0227A090500BA0668 /* NetworkOpponent.swift in Sources */,
+				DCC84CA0227A090500BA0668 /* LocalNetworking.swift in Sources */,
 				DCC84C8E2277801F00BA0668 /* Board.swift in Sources */,
 				DCC84CA2227A0EA000BA0668 /* AIPlayer.swift in Sources */,
 				DCC84CA4227A0EB100BA0668 /* Player.swift in Sources */,
@@ -346,15 +350,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 78R93KV548;
+				DEVELOPMENT_TEAM = 6R6NEH26ZQ;
 				INFOPLIST_FILE = Battleship/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = info.isaksson.erland.Battleship;
+				PRODUCT_BUNDLE_IDENTIFIER = "info.isaksson.erland.Battleship-beta";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -364,15 +370,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 78R93KV548;
+				DEVELOPMENT_TEAM = 6R6NEH26ZQ;
 				INFOPLIST_FILE = Battleship/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = info.isaksson.erland.Battleship;
+				PRODUCT_BUNDLE_IDENTIFIER = "info.isaksson.erland.Battleship-beta";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

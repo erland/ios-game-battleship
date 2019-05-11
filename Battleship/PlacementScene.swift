@@ -19,6 +19,7 @@ class PlacementScene: SKScene {
     var rotateMode: Bool = false
     var gameBoard: BoardView
     var button: SKSpriteNode
+    var buttonText: SKLabelNode
     var battleshipDelegate: BattleshipDelegate
     
     let gridSize = 10
@@ -32,6 +33,7 @@ class PlacementScene: SKScene {
         gameBoard.position = CGPoint(x: margin,y: size.height-margin)
 
         button = SKSpriteNode(color: SKColor.lightGray, size: CGSize(width: 150, height: 44))
+        buttonText = SKLabelNode(fontNamed:"Chalkduster")
         super.init(size: size)
     }
     
@@ -54,7 +56,6 @@ class PlacementScene: SKScene {
         gameBoard.board.addShip(ship: destroyer, x: 0, y: 8)
         
         button.position = CGPoint(x:self.frame.midX, y:size.height-gameBoard.size.height-120);
-        let buttonText = SKLabelNode(fontNamed:"Chalkduster")
         buttonText.text = "Finished"
         buttonText.color = UIColor.black
         buttonText.fontSize = 18
@@ -75,6 +76,7 @@ class PlacementScene: SKScene {
         }
         let touchLocation = touch.location(in: self)
         if button.contains(touchLocation) {
+            buttonText.text = "Waiting"
             battleshipDelegate.placementComplete(board: gameBoard.board)
         }else {
             selectShip(position: touchLocation)

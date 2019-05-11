@@ -15,10 +15,14 @@ class GameViewController: UIViewController, BattleshipDelegate {
     
     var opponentBoard : Board?
     var myBoard : Board?
-    var aiPlayer : AIPlayer?
+    var opponentPlayer : Player?
+    var network : LocalNetworking?
+    var matchMakingScene : MatchMakingScene?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        network = LocalNetworking(battleshipDelegate: self)
         startMatchMaking()
     }
 
@@ -27,18 +31,33 @@ class GameViewController: UIViewController, BattleshipDelegate {
     }
     
     func startMatchMaking() {
+        opponentPlayer = nil
+        opponentBoard = nil
+        myBoard = nil
         let skView = view as! SKView
         skView.isMultipleTouchEnabled = false
         // Create and configure the scene.
         let scene = MatchMakingScene(delegate: self, size: skView.bounds.size)
         scene.scaleMode = .aspectFill
-        
+        matchMakingScene = scene
         // Present the scene.
         skView.presentScene(scene)
-        aiPlayer = AIPlayer(name: "AI")
-        scene.addOpponent(name: "AI")
+        //opponentPlayer = AIPlayer(name: "AI")
+        if let network = network {
+            for player in network.peers {
+                matchMakingScene?.addOpponent(name: player)
+            }
+        }
+        network?.sendReadyToPlay(player: nil)
     }
     
+    func addOpponent(player: String) {
+        matchMakingScene?.addOpponent(name: player)
+    }
+    func removeOpponent(player: String) {
+        matchMakingScene?.removeOpponent(name: player)
+    }
+
     override var shouldAutorotate: Bool {
         return true
     }
@@ -57,19 +76,22 @@ class GameViewController: UIViewController, BattleshipDelegate {
     
     func placementComplete(board: Board) {
         let skView = view as! SKView
-        
-        
-        if opponentBoard == nil {
-            aiPlayer?.placementCompleted(opponentBoard: board)
-            opponentBoard = Board(name:"AI", x: 10, y: 10)
-            let carrier = Ship.init(length: 5)
-            let battleship = Ship.init(length: 4)
-            let crusier = Ship.init(length: 3)
-            let submarine = Ship.init(length: 3)
-            let destroyer = Ship.init(length: 2)
-
-            aiPlayer?.readyForPlacement(delegate: self, board: opponentBoard!, ships: [carrier, battleship, crusier, submarine, destroyer])
+        print("Placement completed for \(board.name)")
+        if opponentPlayer == nil {
+            print("opponentPlayer not set yet")
         }else {
+            print("opponentPlayer is set")
+        }
+        if board.name != "Player" {
+            print("Storing opponent board")
+            opponentBoard = board
+        }else {
+            print("Storing player board")
+            myBoard = board
+            opponentPlayer?.placementCompleted(opponentBoard: myBoard!)
+        }
+        
+        if opponentBoard != nil && myBoard != nil {
             // Create and configure the scene.
             let scene = GameScene(delegate: self, myBoard: myBoard!, opponentBoard: opponentBoard!,size: skView.bounds.size)
             scene.scaleMode = .aspectFill
@@ -86,18 +108,9 @@ class GameViewController: UIViewController, BattleshipDelegate {
         
         // Present the scene.
         skView.presentScene(scene)
+        network?.sendFinishedPlaying()
     }
 
-    func startGame(player: String) {
-        // Configure the view.
-        let skView = view as! SKView
-        skView.isMultipleTouchEnabled = false
-        
-        opponentBoard = nil
-        myBoard = Board(name: "Player", x: 10, y: 10)
-        showPlacementScene(board: myBoard!, view: skView)
-    }
-    
     private func showPlacementScene(board: Board, view: SKView) {
         // Create and configure the scene.
         let scene = PlacementScene(delegate: self, board: board, size: view.bounds.size)
@@ -108,15 +121,48 @@ class GameViewController: UIViewController, BattleshipDelegate {
 
     }
     
+    private func createShips() -> [Ship] {
+        let carrier = Ship.init(length: 5)
+        let battleship = Ship.init(length: 4)
+        let crusier = Ship.init(length: 3)
+        let submarine = Ship.init(length: 3)
+        let destroyer = Ship.init(length: 2)
+        return [carrier, battleship, crusier, submarine, destroyer]
+    }
+    
     func selectedOpponent(player: String) {
-        startGame(player: player)
+        matchMakingScene = nil
+        opponentPlayer = NetworkPlayer(network: network!, name: player)
+        print("Telling opponent it can start place ships")
+        let opponentShips = createShips()
+        let opponentBoard = Board(name: player, x: 10, y: 10)
+        opponentPlayer?.readyForPlacement(delegate: self, board: opponentBoard, ships: opponentShips)
+
+    }
+    
+    func readyForPlacement(player: String, x: Int, y: Int) {
+        matchMakingScene = nil
+        if opponentPlayer == nil {
+            opponentPlayer = NetworkPlayer(network: network!, name: player)
+            let opponentShips = createShips()
+            let opponentBoard = Board(name: player, x: x, y: y)
+            opponentPlayer?.readyForPlacement(delegate: self, board: opponentBoard, ships: opponentShips)
+        }
+
+        print("Launch view to start place ships")
+        // Configure the view.
+        let skView = view as! SKView
+        skView.isMultipleTouchEnabled = false
+        
+        let board = Board(name: "Player", x: x, y: y)
+        showPlacementScene(board: board, view: skView)
     }
     
     func shoot(playerName: String, x: Int, y: Int) {
         print("Shot from \(playerName)")
         if playerName == myBoard?.name {
             print("Forwarding shot to AI at \(x),\(y)")
-            aiPlayer?.shoot(delegate: self, x: x, y: y)
+            opponentPlayer?.shoot(delegate: self, x: x, y: y)
         }else if playerName == opponentBoard?.name{
             let skView = view as! SKView
             if skView.scene is GameScene {
@@ -139,9 +185,9 @@ class GameViewController: UIViewController, BattleshipDelegate {
                 gameScene.shootResult(x: x, y: y, hit: hit)
             }
             print("AI ready for shoot")
-            aiPlayer?.readyForShoot(delegate: self)
+            opponentPlayer?.readyForShoot(delegate: self)
         }else if playerName == myBoard?.name{
-            aiPlayer?.shootResult(x: x, y: y, hit: hit)
+            opponentPlayer?.shootResult(x: x, y: y, hit: hit)
             
             let skView = view as! SKView
             if skView.scene is GameScene {

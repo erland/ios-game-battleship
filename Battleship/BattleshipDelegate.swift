@@ -7,6 +7,9 @@
 //
 
 protocol BattleshipDelegate {
+    func addOpponent(player: String)
+    func removeOpponent(player: String)
+    func readyForPlacement(player: String, x: Int, y: Int)
     func selectedOpponent(player: String)
     func placementComplete(board: Board)
     func gameOver(board: Board, won: Bool)
