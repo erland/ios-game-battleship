@@ -13,7 +13,7 @@ class MatchMakingScene: SKScene {
     
     let battleshipDelegate: BattleshipDelegate
     var waitingText : SKLabelNode?
-    var opponentFound : SKLabelNode?
+    var opponents : [SKLabelNode] = []
     
     init(delegate: BattleshipDelegate, size: CGSize) {
         self.battleshipDelegate = delegate
@@ -26,33 +26,58 @@ class MatchMakingScene: SKScene {
     
     override func didMove(to view: SKView) {
         waitingText = SKLabelNode(fontNamed:"Chalkduster")
-        waitingText?.text = "Waiting for opponent"
-        waitingText?.fontSize = 20
+        waitingText?.fontSize = 30
         waitingText?.position = CGPoint(x: size.width * 0.5, y: size.height * 0.65)
+        updateInstructionText()
         addChild(waitingText!)
-        opponentFound = SKLabelNode(fontNamed:"Chalkduster")
-        opponentFound?.text = ""
-        opponentFound?.fontSize = 20
-        opponentFound?.position = CGPoint(x: size.width * 0.5, y: size.height * 0.50)
-        addChild(opponentFound!)
-
-    }
-    
-    func addOpponent(name: String) {
-        waitingText?.text = "Select opponent"
-        opponentFound?.text = name
-    }
-    
-    func removeOpponent(name: String) {
-        if opponentFound?.text == name {
-            waitingText?.text = "Waiting for opponent"
-            opponentFound?.text = ""
+        for i in 0..<5 {
+            let opponent = SKLabelNode(fontNamed:"Chalkduster")
+            opponent.text = ""
+            opponent.fontSize = 20
+            opponent.position = CGPoint(x: size.width * 0.5, y: size.height * 0.55-CGFloat(i)*size.height/20.0)
+            opponents.append(opponent)
+            addChild(opponent)
         }
     }
     
+    func addOpponent(name: String) {
+        for opponent in opponents {
+            if opponent.text == "" {
+                opponent.text = name
+                break
+            }
+        }
+        updateInstructionText()
+    }
+    
+    func removeOpponent(name: String) {
+        for opponent in opponents {
+            if opponent.text == name {
+                opponent.text = ""
+                break
+            }
+        }
+        updateInstructionText()
+    }
+    
+    private func updateInstructionText() {
+        waitingText?.text = "Waiting for opponent"
+        for opponent in opponents {
+            if opponent.text != "" {
+                waitingText?.text = "Select opponent"
+                break
+            }
+        }
+    }
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if opponentFound?.text != "" {
-            battleshipDelegate.selectedOpponent(player: opponentFound!.text!)
+        guard let touch = touches.first else {
+            return
+        }
+        for opponent in opponents {
+            if opponent.frame.contains(touch.location(in: self)) {
+                battleshipDelegate.selectedOpponent(player: opponent.text!)
+                break
+            }
         }
     }
     

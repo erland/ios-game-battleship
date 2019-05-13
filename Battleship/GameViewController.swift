@@ -16,6 +16,7 @@ class GameViewController: UIViewController, BattleshipDelegate {
     var opponentBoard : Board?
     var myBoard : Board?
     var opponentPlayer : Player?
+    var aiPlayer : Player?
     var network : LocalNetworking?
     var matchMakingScene : MatchMakingScene?
     
@@ -42,7 +43,8 @@ class GameViewController: UIViewController, BattleshipDelegate {
         matchMakingScene = scene
         // Present the scene.
         skView.presentScene(scene)
-        //opponentPlayer = AIPlayer(name: "AI")
+        aiPlayer = AIPlayer(name: "AI")
+        matchMakingScene?.addOpponent(name: "AI")
         if let network = network {
             for player in network.peers {
                 matchMakingScene?.addOpponent(name: player)
@@ -132,7 +134,11 @@ class GameViewController: UIViewController, BattleshipDelegate {
     
     func selectedOpponent(player: String) {
         matchMakingScene = nil
-        opponentPlayer = NetworkPlayer(network: network!, name: player)
+        if player == "AI" {
+            opponentPlayer = aiPlayer
+        }else {
+            opponentPlayer = NetworkPlayer(network: network!, name: player)
+        }
         print("Telling opponent it can start place ships")
         let opponentShips = createShips()
         let opponentBoard = Board(name: player, x: 10, y: 10)

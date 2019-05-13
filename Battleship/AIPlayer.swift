@@ -16,6 +16,7 @@ class AIPlayer : Player {
         playerName = name
     }
     func readyForPlacement(delegate: BattleshipDelegate, board: Board, ships: [Ship]) {
+        delegate.readyForPlacement(player: playerName, x: board.width, y: board.height)
         for ship in ships {
             var placed = false
             repeat {
