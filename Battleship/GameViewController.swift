@@ -113,9 +113,9 @@ class GameViewController: UIViewController, BattleshipDelegate {
         network?.sendFinishedPlaying()
     }
 
-    private func showPlacementScene(board: Board, view: SKView) {
+    private func showPlacementScene(board: Board, ships: [Ship], view: SKView) {
         // Create and configure the scene.
-        let scene = PlacementScene(delegate: self, board: board, size: view.bounds.size)
+        let scene = PlacementScene(delegate: self, board: board, ships: ships, size: view.bounds.size)
         scene.scaleMode = .aspectFill
         
         // Present the scene.
@@ -146,11 +146,11 @@ class GameViewController: UIViewController, BattleshipDelegate {
 
     }
     
-    func readyForPlacement(player: String, x: Int, y: Int) {
+    func readyForPlacement(player: String, x: Int, y: Int, ships: [Ship]) {
         matchMakingScene = nil
         if opponentPlayer == nil {
             opponentPlayer = NetworkPlayer(network: network!, name: player)
-            let opponentShips = createShips()
+            let opponentShips = ships.map{$0.copy() as! Ship}
             let opponentBoard = Board(name: player, x: x, y: y)
             opponentPlayer?.readyForPlacement(delegate: self, board: opponentBoard, ships: opponentShips)
         }
@@ -161,7 +161,7 @@ class GameViewController: UIViewController, BattleshipDelegate {
         skView.isMultipleTouchEnabled = false
         
         let board = Board(name: "Player", x: x, y: y)
-        showPlacementScene(board: board, view: skView)
+        showPlacementScene(board: board, ships: ships, view: skView)
     }
     
     func shoot(playerName: String, x: Int, y: Int) {

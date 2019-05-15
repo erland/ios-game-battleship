@@ -11,7 +11,7 @@ import SpriteKit
 protocol ShipObserver {
     func shipUpdated(ship: Ship)
 }
-class Ship : Hashable {
+class Ship : Hashable, NSCopying {
     let length: Int
     var observers: [ShipObserver] = []
     var hits:Array<Bool>
@@ -26,6 +26,13 @@ class Ship : Hashable {
         self.y = 0
         self.orientation = Orientation.Horizontal
         self.hits = Array(repeating: false, count: length)
+    }
+    
+    func copy(with zone: NSZone? = nil) -> Any {
+        let copy = Ship(length: self.length)
+        copy.x = self.x
+        copy.y = self.y
+        return copy
     }
     
     func attachObserver(observer: ShipObserver) {

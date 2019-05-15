@@ -179,7 +179,7 @@ class LocalNetworking : NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDe
             let board = try! JSONDecoder().decode(NetworkBoard.self, from: message.data)
             print("Received readyForPlacement on \(board.boardWidth),\(board.boardHeight) board")
             DispatchQueue.main.async {
-                self.battleshipDelegate.readyForPlacement(player: peerID.displayName, x: board.boardWidth, y: board.boardHeight)
+                self.battleshipDelegate.readyForPlacement(player: peerID.displayName, x: board.boardWidth, y: board.boardHeight, ships: board.getShipObjects())
             }
         }else if message.message == "placementCompleted" {
             let networkBoard = try! JSONDecoder().decode(NetworkBoard.self, from: message.data)

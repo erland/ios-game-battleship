@@ -24,13 +24,16 @@ class PlacementScene: SKScene {
     
     let gridSize = 10
     
-    init(delegate: BattleshipDelegate, board: Board, size: CGSize) {
+    init(delegate: BattleshipDelegate, board: Board, ships: [Ship], size: CGSize) {
         let margin = size.width/20
         let cellSize = (size.width-margin*2)/CGFloat(gridSize)
         battleshipDelegate = delegate
         gameBoard = BoardView.init(board: board, cellSize: cellSize)
         gameBoard.anchorPoint = CGPoint(x: 0, y: 1)
         gameBoard.position = CGPoint(x: margin,y: size.height-margin)
+        for (i, ship) in ships.enumerated() {
+            board.addShip(ship: ship, x: 0, y: i*2)
+        }
 
         button = SKSpriteNode(color: SKColor.lightGray, size: CGSize(width: 150, height: 44))
         buttonText = SKLabelNode(fontNamed:"Chalkduster")
@@ -44,16 +47,6 @@ class PlacementScene: SKScene {
     override func didMove(to view: SKView) {
         
         addChild(gameBoard)
-        let carrier = Ship.init(length: 5)
-        gameBoard.board.addShip(ship: carrier, x: 0, y: 0)
-        let battleship = Ship.init(length: 4)
-        gameBoard.board.addShip(ship: battleship, x: 0, y: 2)
-        let crusier = Ship.init(length: 3)
-        gameBoard.board.addShip(ship: crusier, x: 0, y: 4)
-        let submarine = Ship.init(length: 3)
-        gameBoard.board.addShip(ship: submarine, x: 0, y: 6)
-        let destroyer = Ship.init(length: 2)
-        gameBoard.board.addShip(ship: destroyer, x: 0, y: 8)
         
         button.position = CGPoint(x:self.frame.midX, y:size.height-gameBoard.size.height-120);
         buttonText.text = "Finished"
