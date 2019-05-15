@@ -14,8 +14,6 @@
 		DCC84C322275EA2E00BA0668 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DCC84C312275EA2E00BA0668 /* Assets.xcassets */; };
 		DCC84C352275EA2E00BA0668 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DCC84C332275EA2E00BA0668 /* LaunchScreen.storyboard */; };
 		DCC84C842276B1DF00BA0668 /* Array2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC84C832276B1DF00BA0668 /* Array2D.swift */; };
-		DCC84C862276B28600BA0668 /* Block.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC84C852276B28600BA0668 /* Block.swift */; };
-		DCC84C882276B31100BA0668 /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC84C872276B31100BA0668 /* Shape.swift */; };
 		DCC84C8A2276B40500BA0668 /* BattleshipDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC84C892276B40500BA0668 /* BattleshipDelegate.swift */; };
 		DCC84C8E2277801F00BA0668 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC84C8D2277801F00BA0668 /* Board.swift */; };
 		DCC84C922278038400BA0668 /* Ship.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC84C912278038400BA0668 /* Ship.swift */; };
@@ -24,7 +22,6 @@
 		DCC84C98227995DA00BA0668 /* ShipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC84C97227995DA00BA0668 /* ShipView.swift */; };
 		DCC84C9A2279D3A800BA0668 /* GameOverScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC84C992279D3A800BA0668 /* GameOverScene.swift */; };
 		DCC84C9C2279EF7100BA0668 /* MatchMakingScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC84C9B2279EF7100BA0668 /* MatchMakingScene.swift */; };
-		DCC84C9E2279FC8300BA0668 /* CommandDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC84C9D2279FC8300BA0668 /* CommandDelegate.swift */; };
 		DCC84CA0227A090500BA0668 /* LocalNetworking.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC84C9F227A090500BA0668 /* LocalNetworking.swift */; };
 		DCC84CA2227A0EA000BA0668 /* AIPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC84CA1227A0EA000BA0668 /* AIPlayer.swift */; };
 		DCC84CA4227A0EB100BA0668 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC84CA3227A0EB100BA0668 /* Player.swift */; };
@@ -41,8 +38,6 @@
 		DCC84C342275EA2E00BA0668 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DCC84C362275EA2E00BA0668 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DCC84C832276B1DF00BA0668 /* Array2D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array2D.swift; sourceTree = "<group>"; };
-		DCC84C852276B28600BA0668 /* Block.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Block.swift; sourceTree = "<group>"; };
-		DCC84C872276B31100BA0668 /* Shape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shape.swift; sourceTree = "<group>"; };
 		DCC84C892276B40500BA0668 /* BattleshipDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BattleshipDelegate.swift; sourceTree = "<group>"; };
 		DCC84C8D2277801F00BA0668 /* Board.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
 		DCC84C912278038400BA0668 /* Ship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ship.swift; sourceTree = "<group>"; };
@@ -51,7 +46,6 @@
 		DCC84C97227995DA00BA0668 /* ShipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShipView.swift; sourceTree = "<group>"; };
 		DCC84C992279D3A800BA0668 /* GameOverScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverScene.swift; sourceTree = "<group>"; };
 		DCC84C9B2279EF7100BA0668 /* MatchMakingScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchMakingScene.swift; sourceTree = "<group>"; };
-		DCC84C9D2279FC8300BA0668 /* CommandDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandDelegate.swift; sourceTree = "<group>"; };
 		DCC84C9F227A090500BA0668 /* LocalNetworking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNetworking.swift; sourceTree = "<group>"; };
 		DCC84CA1227A0EA000BA0668 /* AIPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIPlayer.swift; sourceTree = "<group>"; };
 		DCC84CA3227A0EB100BA0668 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
@@ -88,29 +82,26 @@
 		DCC84C232275EA2B00BA0668 /* Battleship */ = {
 			isa = PBXGroup;
 			children = (
-				DCC84C9522798F0200BA0668 /* BoardView.swift */,
-				DCC84C8D2277801F00BA0668 /* Board.swift */,
+				DCC84CA1227A0EA000BA0668 /* AIPlayer.swift */,
 				DCC84C242275EA2B00BA0668 /* AppDelegate.swift */,
-				DCC84C2A2275EA2B00BA0668 /* PlacementScene.swift */,
-				DCC84C2C2275EA2B00BA0668 /* GameViewController.swift */,
-				DCC84C2E2275EA2B00BA0668 /* Main.storyboard */,
-				DCC84C312275EA2E00BA0668 /* Assets.xcassets */,
-				DCC84C332275EA2E00BA0668 /* LaunchScreen.storyboard */,
-				DCC84C362275EA2E00BA0668 /* Info.plist */,
 				DCC84C832276B1DF00BA0668 /* Array2D.swift */,
-				DCC84C852276B28600BA0668 /* Block.swift */,
-				DCC84C872276B31100BA0668 /* Shape.swift */,
 				DCC84C892276B40500BA0668 /* BattleshipDelegate.swift */,
+				DCC84C8D2277801F00BA0668 /* Board.swift */,
+				DCC84C9522798F0200BA0668 /* BoardView.swift */,
+				DCC84C992279D3A800BA0668 /* GameOverScene.swift */,
+				DCC84C9322796DDB00BA0668 /* GameScene.swift */,
+				DCC84C2C2275EA2B00BA0668 /* GameViewController.swift */,
+				DCC84C332275EA2E00BA0668 /* LaunchScreen.storyboard */,
+				DCC84C9F227A090500BA0668 /* LocalNetworking.swift */,
+				DCC84C2E2275EA2B00BA0668 /* Main.storyboard */,
+				DCC84C9B2279EF7100BA0668 /* MatchMakingScene.swift */,
+				DCC84CA5227D648000BA0668 /* NetworkPlayer.swift */,
+				DCC84C2A2275EA2B00BA0668 /* PlacementScene.swift */,
+				DCC84CA3227A0EB100BA0668 /* Player.swift */,
 				DCC84C912278038400BA0668 /* Ship.swift */,
 				DCC84C97227995DA00BA0668 /* ShipView.swift */,
-				DCC84C9322796DDB00BA0668 /* GameScene.swift */,
-				DCC84C992279D3A800BA0668 /* GameOverScene.swift */,
-				DCC84C9B2279EF7100BA0668 /* MatchMakingScene.swift */,
-				DCC84C9D2279FC8300BA0668 /* CommandDelegate.swift */,
-				DCC84C9F227A090500BA0668 /* LocalNetworking.swift */,
-				DCC84CA1227A0EA000BA0668 /* AIPlayer.swift */,
-				DCC84CA3227A0EB100BA0668 /* Player.swift */,
-				DCC84CA5227D648000BA0668 /* NetworkPlayer.swift */,
+				DCC84C362275EA2E00BA0668 /* Info.plist */,
+				DCC84C312275EA2E00BA0668 /* Assets.xcassets */,
 			);
 			path = Battleship;
 			sourceTree = "<group>";
@@ -191,14 +182,11 @@
 				DCC84C9422796DDB00BA0668 /* GameScene.swift in Sources */,
 				DCC84C8A2276B40500BA0668 /* BattleshipDelegate.swift in Sources */,
 				DCC84C2B2275EA2B00BA0668 /* PlacementScene.swift in Sources */,
-				DCC84C882276B31100BA0668 /* Shape.swift in Sources */,
 				DCC84C842276B1DF00BA0668 /* Array2D.swift in Sources */,
 				DCC84C922278038400BA0668 /* Ship.swift in Sources */,
 				DCC84C9A2279D3A800BA0668 /* GameOverScene.swift in Sources */,
-				DCC84C9E2279FC8300BA0668 /* CommandDelegate.swift in Sources */,
 				DCC84CA6227D648000BA0668 /* NetworkPlayer.swift in Sources */,
 				DCC84C9C2279EF7100BA0668 /* MatchMakingScene.swift in Sources */,
-				DCC84C862276B28600BA0668 /* Block.swift in Sources */,
 				DCC84C2D2275EA2B00BA0668 /* GameViewController.swift in Sources */,
 				DCC84CA0227A090500BA0668 /* LocalNetworking.swift in Sources */,
 				DCC84C8E2277801F00BA0668 /* Board.swift in Sources */,
