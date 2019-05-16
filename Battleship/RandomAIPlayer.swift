@@ -1,17 +1,19 @@
 //
-//  AIPlayer.swift
+//  BaseAIPlayer.swift
 //  Battleship
 //
-//  Created by Erland Isaksson on 2019-05-01.
+//  Created by Erland Isaksson on 2019-05-16.
 //  Copyright © 2019 Erland Isaksson. All rights reserved.
 //
 
-class AIPlayer : Player {
+import Foundation
+
+class RandomAIPlayer : Player {
     var opponentBoard : Board?
     var myBoard : Board?
     let playerName: String
     var shoots: Array2D<Bool>?
-    var lastHit: Position?
+
     init(name: String) {
         playerName = name
     }
@@ -48,9 +50,10 @@ class AIPlayer : Player {
             self.y = y;
         }
     }
+    
     private func getNearbyCandidate(nearbyX: Int, nearbyY: Int) -> Position? {
         var position: Position?
-
+        
         if nearbyX>0 {
             if shoots![nearbyX-1, nearbyY] == nil {
                 position = Position(x: nearbyX-1, y: nearbyY)
@@ -61,7 +64,7 @@ class AIPlayer : Player {
                 position = Position(x: nearbyX+1, y: nearbyY)
             }
         }
-
+        
         if position == nil {
             if nearbyY>0 {
                 if shoots![nearbyX, nearbyY-1] == nil {
@@ -81,47 +84,27 @@ class AIPlayer : Player {
         return position
     }
     
+    func getNextShootPosition() -> Position? {
+        var position: Position?
+        if let board = opponentBoard {
+            repeat {
+                position = Position(x: Int.random(in: 0..<board.width),
+                                    y: Int.random(in: 0..<board.height))
+            }while(shoots?[position!.x, position!.y] != nil)
+        }
+        return position
+    }
     func readyForShoot(delegate: BattleshipDelegate) {
         print("AI preparing to shoot")
-        if let board = opponentBoard {
-            var position: Position?
-            
-            if lastHit != nil {
-                position = getNearbyCandidate(nearbyX: lastHit!.x, nearbyY: lastHit!.y)
-            }
-            if position == nil {
-                for cellX in 0..<board.width {
-                    for cellY in 0..<board.height {
-                        if shoots![cellX, cellY] == true {
-                            position = getNearbyCandidate(nearbyX: cellX, nearbyY: cellY)
-                        }
-                        if position == nil {
-                            break
-                        }
-                    }
-                    if position == nil {
-                        break
-                    }
-                }
-            }
-            if position == nil {
-                repeat {
-                    position = Position(x: Int.random(in: 0..<board.width),
-                                        y: Int.random(in: 0..<board.height))
-                }while(shoots?[position!.x, position!.y] != nil)
-            }
-            print("AI shooting at \(position!.x),\(position!.y)")
-            delegate.shoot(playerName: playerName, x: position!.x, y: position!.y)
-        }
+        let position = getNextShootPosition()
+        print("AI shooting at \(position!.x),\(position!.y)")
+        delegate.shoot(playerName: playerName, x: position!.x, y: position!.y)
     }
     
     func shootResult(x: Int, y: Int, hit: Bool) {
         shoots?[x,y] = hit
-        if hit {
-            lastHit = Position(x: x, y: y)
-        }
     }
-
+    
     func shoot(delegate: BattleshipDelegate, x: Int, y: Int) {
         if let board = myBoard {
             let ship = board.shipAtPosition(x: x, y: y)

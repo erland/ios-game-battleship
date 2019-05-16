@@ -16,7 +16,9 @@ class GameViewController: UIViewController, BattleshipDelegate {
     var opponentBoard : Board?
     var myBoard : Board?
     var opponentPlayer : Player?
-    var aiPlayer : Player?
+    var randomAIPlayer : Player?
+    var lastHitAIPlayer : Player?
+    var probabilityAIPlayer : Player?
     var network : BattleshipNetwork?
     var matchMakingScene : MatchMakingScene?
     
@@ -43,8 +45,12 @@ class GameViewController: UIViewController, BattleshipDelegate {
         matchMakingScene = scene
         // Present the scene.
         skView.presentScene(scene)
-        aiPlayer = AIPlayer(name: "AI")
-        matchMakingScene?.addOpponent(name: "AI")
+        randomAIPlayer = RandomAIPlayer(name: "AI (very easy)")
+        matchMakingScene?.addOpponent(name: "AI (very easy)")
+        lastHitAIPlayer = LastHitAIPlayer(name: "AI (easy)")
+        matchMakingScene?.addOpponent(name: "AI (easy)")
+        probabilityAIPlayer = ProbabilityAIPlayer(name: "AI (normal)")
+        matchMakingScene?.addOpponent(name: "AI (normal)")
         if let network = network {
             for player in network.players {
                 matchMakingScene?.addOpponent(name: player)
@@ -134,8 +140,12 @@ class GameViewController: UIViewController, BattleshipDelegate {
     
     func selectedOpponent(player: String) {
         matchMakingScene = nil
-        if player == "AI" {
-            opponentPlayer = aiPlayer
+        if player == "AI (very easy)" {
+            opponentPlayer = randomAIPlayer
+        }else if player == "AI (easy)" {
+            opponentPlayer = lastHitAIPlayer
+        }else if player == "AI (normal)" {
+            opponentPlayer = probabilityAIPlayer
         }else {
             opponentPlayer = NetworkPlayer(network: network!, name: player)
         }

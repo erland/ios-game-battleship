@@ -34,7 +34,7 @@ class MatchMakingScene: SKScene {
             let opponent = SKLabelNode(fontNamed:"Chalkduster")
             opponent.text = ""
             opponent.fontSize = 20
-            opponent.position = CGPoint(x: size.width * 0.5, y: size.height * 0.55-CGFloat(i)*size.height/20.0)
+            opponent.position = CGPoint(x: size.width * 0.5, y: size.height * 0.55-CGFloat(i)*size.height/15.0)
             opponents.append(opponent)
             addChild(opponent)
         }
