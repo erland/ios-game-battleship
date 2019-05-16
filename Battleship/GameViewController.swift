@@ -17,13 +17,13 @@ class GameViewController: UIViewController, BattleshipDelegate {
     var myBoard : Board?
     var opponentPlayer : Player?
     var aiPlayer : Player?
-    var network : LocalNetworking?
+    var network : BattleshipNetwork?
     var matchMakingScene : MatchMakingScene?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        network = LocalNetworking(battleshipDelegate: self)
+        network = BattleshipNetwork(battleshipDelegate: self)
         startMatchMaking()
     }
 
@@ -46,7 +46,7 @@ class GameViewController: UIViewController, BattleshipDelegate {
         aiPlayer = AIPlayer(name: "AI")
         matchMakingScene?.addOpponent(name: "AI")
         if let network = network {
-            for player in network.peers {
+            for player in network.players {
                 matchMakingScene?.addOpponent(name: player)
             }
         }

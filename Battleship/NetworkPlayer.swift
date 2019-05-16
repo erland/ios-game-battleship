@@ -11,8 +11,8 @@ class NetworkPlayer : Player {
     var opponentBoard : Board?
     var myBoard : Board?
     let playerName: String
-    let network : LocalNetworking
-    init(network: LocalNetworking, name: String) {
+    let network : BattleshipNetwork
+    init(network: BattleshipNetwork, name: String) {
         playerName = name
         self.network = network
         print("Creating NetworkPlayer for \(name)")

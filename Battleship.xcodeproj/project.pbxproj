@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DC285563228C9C0E006B4571 /* BattleshipNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC285562228C9C0E006B4571 /* BattleshipNetwork.swift */; };
 		DCC84C252275EA2B00BA0668 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC84C242275EA2B00BA0668 /* AppDelegate.swift */; };
 		DCC84C2B2275EA2B00BA0668 /* PlacementScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC84C2A2275EA2B00BA0668 /* PlacementScene.swift */; };
 		DCC84C2D2275EA2B00BA0668 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC84C2C2275EA2B00BA0668 /* GameViewController.swift */; };
@@ -29,6 +30,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		DC285562228C9C0E006B4571 /* BattleshipNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BattleshipNetwork.swift; sourceTree = "<group>"; };
 		DCC84C212275EA2B00BA0668 /* Battleship.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Battleship.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCC84C242275EA2B00BA0668 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DCC84C2A2275EA2B00BA0668 /* PlacementScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacementScene.swift; sourceTree = "<group>"; };
@@ -96,6 +98,7 @@
 				DCC84C2E2275EA2B00BA0668 /* Main.storyboard */,
 				DCC84C9B2279EF7100BA0668 /* MatchMakingScene.swift */,
 				DCC84CA5227D648000BA0668 /* NetworkPlayer.swift */,
+				DC285562228C9C0E006B4571 /* BattleshipNetwork.swift */,
 				DCC84C2A2275EA2B00BA0668 /* PlacementScene.swift */,
 				DCC84CA3227A0EB100BA0668 /* Player.swift */,
 				DCC84C912278038400BA0668 /* Ship.swift */,
@@ -177,6 +180,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DC285563228C9C0E006B4571 /* BattleshipNetwork.swift in Sources */,
 				DCC84C98227995DA00BA0668 /* ShipView.swift in Sources */,
 				DCC84C9622798F0200BA0668 /* BoardView.swift in Sources */,
 				DCC84C9422796DDB00BA0668 /* GameScene.swift in Sources */,
