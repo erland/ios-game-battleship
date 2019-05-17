@@ -133,19 +133,25 @@ class Board {
         return true
     }
     
-    func rotateShip(ship: Ship) {
+    func rotateShip(ship: Ship, offsetX: Int, offsetY: Int) {
         removeShipFromBoard(ship: ship)
         var newOrientation = Ship.Orientation.Horizontal
         if ship.orientation == Ship.Orientation.Horizontal {
             newOrientation = Ship.Orientation.Vertical
         }
-        if validateNewPosition(ship: ship, x: ship.x, y: ship.y, orientation: newOrientation) {
+        var offset = offsetX
+        if offsetX == 0 {
+            offset = offsetY
+        }
+        if validateNewPosition(ship: ship, x: ship.x+offset, y: ship.y+offset, orientation: newOrientation) {
+            ship.x = ship.x+offset
+            ship.y = ship.y+offset
             ship.orientation = newOrientation
         }
         addShipToBoard(ship: ship)
         //debugBoard()
     }
-    
+
     func debugBoard() {
         print("Board contents")
         for y in 0..<height {

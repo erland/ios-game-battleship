@@ -92,7 +92,7 @@ class PlacementScene: SKScene {
         }
         let touchLocation = touch.location(in: self)
         if rotateMode {
-            rotateSelectedShip()
+            rotateSelectedShip(position: touchLocation)
         }else {
             moveSelectedShip(position: touchLocation)
         }
@@ -117,9 +117,13 @@ class PlacementScene: SKScene {
             selectedOffsetY = nil
         }
     }
-    func rotateSelectedShip() {
+    func rotateSelectedShip(position: CGPoint) {
         if let selectedShip = selectedShip {
-            gameBoard.board.rotateShip(ship: selectedShip)
+            if let selectedOffsetX = selectedOffsetX {
+                if let selectedOffsetY = selectedOffsetY {
+                    gameBoard.board.rotateShip(ship: selectedShip, offsetX: selectedOffsetX, offsetY: selectedOffsetY)
+                }
+            }
         }
     }
 
