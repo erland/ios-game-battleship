@@ -8,7 +8,7 @@
 
 class ProbabilityAIPlayer : RandomAIPlayer {
     var probabilityMap: Array2D<Int>?
-    var ships: [Ship] = []
+    var ships: [Int] = []
     var variation = 6
     
     override init(name: String) {
@@ -18,7 +18,7 @@ class ProbabilityAIPlayer : RandomAIPlayer {
     override func placementCompleted(opponentBoard: Board) {
         super.placementCompleted(opponentBoard: opponentBoard)
         for ship in opponentBoard.ships {
-            ships.append(ship)
+            ships.append(ship.length)
         }
     }
     
@@ -162,7 +162,7 @@ class ProbabilityAIPlayer : RandomAIPlayer {
         if let board = opponentBoard {
             let map = Array2D<Int>(columns: board.width, rows: board.height)
             for ship in ships {
-                buildProbabilityMap(map: map, shipLength: ship.length)
+                buildProbabilityMap(map: map, shipLength: ship)
             }
             debugMap(map: map)
             position = getMaxProbabilityPosition(map: map)
@@ -203,7 +203,7 @@ class ProbabilityAIPlayer : RandomAIPlayer {
                         if ship.isDestroyed() {
                             var foundIndex = 0
                             for (i,s) in ships.enumerated() {
-                                if s.length == ship.length {
+                                if s == ship.length {
                                     foundIndex = i
                                     break
                                 }
