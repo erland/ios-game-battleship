@@ -56,6 +56,20 @@ class Ship : Hashable, NSCopying {
         return result
     }
     
+    func contains(x: Int, y: Int) -> Bool {
+        var result: Bool = false
+        if orientation==Orientation.Horizontal {
+            if y==self.y && x>=self.x && x < self.x+length {
+                result = true
+            }
+        }else {
+            if x==self.x && y>self.y-length && y <= self.y {
+                result = true
+            }
+        }
+        return result
+    }
+
     func isDestroyed() -> Bool {
         for hit in hits {
             if !hit {

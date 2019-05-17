@@ -11,5 +11,5 @@ protocol Player {
     func placementCompleted(opponentBoard: Board)
     func readyForShoot(delegate: BattleshipDelegate)
     func shoot(delegate: BattleshipDelegate, x: Int, y: Int)
-    func shootResult(x: Int, y: Int, hit: Bool)
+    func shootResult(x: Int, y: Int, hit: Bool, destroyedShip: Ship?)
 }

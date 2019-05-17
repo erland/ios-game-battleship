@@ -9,6 +9,7 @@
 class ProbabilityAIPlayer : RandomAIPlayer {
     var probabilityMap: Array2D<Int>?
     var ships: [Int] = []
+    var destroyedShips : [Ship] = []
     var variation = 6
     
     override init(name: String) {
@@ -22,17 +23,22 @@ class ProbabilityAIPlayer : RandomAIPlayer {
         }
     }
     
+    private func destroyedShipAtPosition(x: Int, y: Int) -> Bool {
+        for ship in destroyedShips {
+            if ship.contains(x: x, y: y) {
+                return true
+            }
+        }
+        return false
+    }
+    
     func addProbabilityForVerticalShip(map: Array2D<Int>, x: Int, y: Int, length: Int) {
         var probabilityIncrease = 1
         for y in y..<(y+length) {
             if shoots![x,y] != nil {
                 if shoots![x,y]! {
-                    if let board = opponentBoard {
-                        if let ship = board.shipAtPosition(x: x, y: y) {
-                            if !ship.isDestroyed() {
-                                probabilityIncrease = probabilityIncrease + 4
-                            }
-                        }
+                    if !destroyedShipAtPosition(x: x, y: y) {
+                        probabilityIncrease = probabilityIncrease + 4
                     }
                 }
             }
@@ -51,12 +57,8 @@ class ProbabilityAIPlayer : RandomAIPlayer {
         for x in x..<(x+length) {
             if shoots![x,y] != nil {
                 if shoots![x,y]! {
-                    if let board = opponentBoard {
-                        if let ship = board.shipAtPosition(x: x, y: y) {
-                            if !ship.isDestroyed() {
-                                probabilityIncrease = probabilityIncrease + 4
-                            }
-                        }
+                    if !destroyedShipAtPosition(x: x, y: y) {
+                        probabilityIncrease = probabilityIncrease + 4
                     }
                 }
             }
@@ -193,26 +195,19 @@ class ProbabilityAIPlayer : RandomAIPlayer {
         }
     }
     
-    override func shootResult(x: Int, y: Int, hit: Bool) {
-        super.shootResult(x: x, y: y, hit: hit)
+    override func shootResult(x: Int, y: Int, hit: Bool, destroyedShip: Ship?) {
+        super.shootResult(x: x, y: y, hit: hit, destroyedShip: destroyedShip)
         if hit {
-            if let board = opponentBoard {
-                let ship = board.shipAtPosition(x: x, y: y)
-                if let ship = ship {
-                    if ship.shoot(x: x, y: y)  {
-                        if ship.isDestroyed() {
-                            var foundIndex = 0
-                            for (i,s) in ships.enumerated() {
-                                if s == ship.length {
-                                    foundIndex = i
-                                    break
-                                }
-                            }
-                            ships.remove(at: foundIndex)
-                        }
+            if let destroyedShip = destroyedShip {
+                var foundIndex = 0
+                for (i,s) in ships.enumerated() {
+                    if s == destroyedShip.length {
+                        foundIndex = i
+                        break
                     }
                 }
-
+                destroyedShips.append(destroyedShip)
+                ships.remove(at: foundIndex)
             }
         }
     }

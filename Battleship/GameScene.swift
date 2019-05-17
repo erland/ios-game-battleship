@@ -73,11 +73,19 @@ class GameScene: SKScene {
     }
     
     func shoot(x: Int, y: Int) {
-        var result: Bool = false
+        var hitShip: Ship?
         if x>=0 && x<myBoardView.board.width && y>=0 && y<myBoardView.board.height {
-            result = processShoot(boardView: myBoardView, x: x, y: y, small: true, won: false)
+            hitShip = processShoot(boardView: myBoardView, x: x, y: y, small: true, won: false)
         }
-        battleshipDelegate.shootResult(playerName: myBoardView.board.name, x: x, y: y, hit: result)
+        if let hitShip = hitShip {
+            if hitShip.isDestroyed() {
+                battleshipDelegate.shootResult(playerName: myBoardView.board.name, x: x, y: y, hit: true, destroyedShip: hitShip)
+            }else {
+                battleshipDelegate.shootResult(playerName: myBoardView.board.name, x: x, y: y, hit: true, destroyedShip: nil)
+            }
+        }else {
+            battleshipDelegate.shootResult(playerName: myBoardView.board.name, x: x, y: y, hit: false, destroyedShip: nil)
+        }
     }
         
     func shoot(position: CGPoint) {
@@ -97,7 +105,7 @@ class GameScene: SKScene {
         processShoot(boardView: opponentBoardView, x: x, y: y, small: false, won: true)
     }
 
-    private func processShoot(boardView: BoardView, x: Int, y: Int, small: Bool, won: Bool) -> Bool {
+    private func processShoot(boardView: BoardView, x: Int, y: Int, small: Bool, won: Bool) -> Ship? {
         let selectedShip = boardView.board.shipAtPosition(x: x,
                                                                   y: y)
         if let selectedShip = selectedShip {
@@ -119,7 +127,7 @@ class GameScene: SKScene {
                 if boardView.board.isAllShipsDestroyed() {
                     battleshipDelegate.gameOver(board: opponentBoardView.board, won: won)
                 }
-                return true
+                return selectedShip
             }
         }else {
             var texture: SKTexture? = self.missTexture
@@ -132,7 +140,7 @@ class GameScene: SKScene {
                                    y: -CGFloat(y)*boardView.cellSize)
             boardView.addChild(hit)
         }
-        return false
+        return nil
 
     }
     private class func createHitTexture(cellSize: CGFloat, strokeColor: UIColor, fillColor: UIColor) -> SKTexture? {

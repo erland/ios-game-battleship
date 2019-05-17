@@ -21,11 +21,13 @@ struct NetworkShootResult : Codable {
     let x: Int
     let y: Int
     let hit: Bool
+    var destroyedShip: NetworkShip?
     
-    init(x: Int, y: Int, hit: Bool) {
+    init(x: Int, y: Int, hit: Bool, destroyedShip: NetworkShip?) {
         self.x = x
         self.y = y
         self.hit = hit
+        self.destroyedShip = destroyedShip
     }
 }
 
@@ -41,6 +43,20 @@ struct NetworkShip : Codable {
         self.length = length
         self.horizontal = horizontal
     }
+    func asShipObj() -> Ship {
+        let shipObj = Ship(length: length)
+        if horizontal {
+            shipObj.orientation = Ship.Orientation.Horizontal
+            shipObj.x = x
+            shipObj.y = y
+        }else {
+            shipObj.orientation = Ship.Orientation.Vertical
+            shipObj.x = x
+            shipObj.y = y
+        }
+        return shipObj
+    }
+    
 }
 struct NetworkBoard : Codable {
     var ships: Array<NetworkShip?>
@@ -69,17 +85,7 @@ struct NetworkBoard : Codable {
         var result = Array<Ship>()
         for (_,ship) in self.ships.enumerated() {
             if let ship = ship {
-                let shipObj = Ship(length: ship.length)
-                if ship.horizontal {
-                    shipObj.orientation = Ship.Orientation.Horizontal
-                    shipObj.x = ship.x
-                    shipObj.y = ship.y
-                }else {
-                    shipObj.orientation = Ship.Orientation.Vertical
-                    shipObj.x = ship.x
-                    shipObj.y = ship.y
-                }
-                result.append(shipObj)
+                result.append(ship.asShipObj())
             }
         }
         return result
@@ -134,7 +140,11 @@ class BattleshipNetwork : MessageProcessor, ConnectionManager {
         }else if message.message == "shootResult" {
             let networkShootResult = try! JSONDecoder().decode(NetworkShootResult.self, from: message.data)
             print("Received shootResult at \(networkShootResult.x),\(networkShootResult.y) = \(networkShootResult.hit)")
-            self.battleshipDelegate.shootResult(playerName: peer, x: networkShootResult.x, y: networkShootResult.y, hit: networkShootResult.hit)
+            if networkShootResult.destroyedShip != nil {
+                self.battleshipDelegate.shootResult(playerName: peer, x: networkShootResult.x, y: networkShootResult.y, hit: networkShootResult.hit, destroyedShip: networkShootResult.destroyedShip?.asShipObj())
+            }else {
+                self.battleshipDelegate.shootResult(playerName: peer, x: networkShootResult.x, y: networkShootResult.y, hit: networkShootResult.hit, destroyedShip: nil)
+            }
         }else {
             print("Unknown message: \(message.message)")
         }

@@ -191,7 +191,7 @@ class GameViewController: UIViewController, BattleshipDelegate {
         }
     }
 
-    func shootResult(playerName: String, x: Int, y: Int, hit: Bool) {
+    func shootResult(playerName: String, x: Int, y: Int, hit: Bool, destroyedShip: Ship?) {
         print("Shoot result from \(playerName)")
         if playerName == opponentBoard?.name {
             let skView = view as! SKView
@@ -203,7 +203,7 @@ class GameViewController: UIViewController, BattleshipDelegate {
             print("AI ready for shoot")
             opponentPlayer?.readyForShoot(delegate: self)
         }else if playerName == myBoard?.name{
-            opponentPlayer?.shootResult(x: x, y: y, hit: hit)
+            opponentPlayer?.shootResult(x: x, y: y, hit: hit, destroyedShip: destroyedShip)
             
             let skView = view as! SKView
             if skView.scene is GameScene {

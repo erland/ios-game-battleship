@@ -101,7 +101,7 @@ class RandomAIPlayer : Player {
         delegate.shoot(playerName: playerName, x: position!.x, y: position!.y)
     }
     
-    func shootResult(x: Int, y: Int, hit: Bool) {
+    func shootResult(x: Int, y: Int, hit: Bool, destroyedShip: Ship?) {
         shoots?[x,y] = hit
     }
     
@@ -110,9 +110,13 @@ class RandomAIPlayer : Player {
             let ship = board.shipAtPosition(x: x, y: y)
             let result = ship?.shoot(x: x, y: y)
             if result != nil {
-                delegate.shootResult(playerName: playerName, x: x, y: y, hit: result!)
+                if ship!.isDestroyed() {
+                    delegate.shootResult(playerName: playerName, x: x, y: y, hit: result!, destroyedShip: ship)
+                }else {
+                    delegate.shootResult(playerName: playerName, x: x, y: y, hit: result!, destroyedShip: nil)
+                }
             }else {
-                delegate.shootResult(playerName: playerName, x: x, y: y, hit: false)
+                delegate.shootResult(playerName: playerName, x: x, y: y, hit: false, destroyedShip: nil)
             }
         }
     }

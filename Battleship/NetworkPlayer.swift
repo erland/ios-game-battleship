@@ -51,8 +51,12 @@ class NetworkPlayer : Player {
         // TODO: Send our shoot to other player
     }
     
-    func shootResult(x: Int, y: Int, hit: Bool) {
-        let shootResult = NetworkShootResult(x: x, y: y, hit: hit)
+    func shootResult(x: Int, y: Int, hit: Bool, destroyedShip: Ship?) {
+        var destroyedNetworkShip: NetworkShip?
+        if let destroyedShip = destroyedShip {
+            destroyedNetworkShip = NetworkShip(x: destroyedShip.x, y: destroyedShip.y, length: destroyedShip.length, horizontal: (destroyedShip.orientation == Ship.Orientation.Horizontal))
+        }
+        let shootResult = NetworkShootResult(x: x, y: y, hit: hit, destroyedShip: destroyedNetworkShip)
         network.sendShootResult(player: playerName, shootResult: shootResult)
         // TODO: Pass result on opponent shot to other player
     }
