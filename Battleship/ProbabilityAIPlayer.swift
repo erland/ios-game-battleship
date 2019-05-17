@@ -9,6 +9,7 @@
 class ProbabilityAIPlayer : RandomAIPlayer {
     var probabilityMap: Array2D<Int>?
     var ships: [Ship] = []
+    var variation = 6
     
     override init(name: String) {
         super.init(name: name)
@@ -29,7 +30,7 @@ class ProbabilityAIPlayer : RandomAIPlayer {
                     if let board = opponentBoard {
                         if let ship = board.shipAtPosition(x: x, y: y) {
                             if !ship.isDestroyed() {
-                                probabilityIncrease = probabilityIncrease * 4
+                                probabilityIncrease = probabilityIncrease + 4
                             }
                         }
                     }
@@ -53,7 +54,7 @@ class ProbabilityAIPlayer : RandomAIPlayer {
                     if let board = opponentBoard {
                         if let ship = board.shipAtPosition(x: x, y: y) {
                             if !ship.isDestroyed() {
-                                probabilityIncrease = probabilityIncrease * 4
+                                probabilityIncrease = probabilityIncrease + 4
                             }
                         }
                     }
@@ -81,11 +82,15 @@ class ProbabilityAIPlayer : RandomAIPlayer {
                 }
             }
         }
+        if variation>0 {
+            highestProbability = highestProbability - variation
+        }
+        variation = variation - 1
         var possiblePositions: [Position] = []
         for x in 0..<map.columns {
             for y in 0..<map.rows {
                 if map[x,y] != nil {
-                    if map[x,y]!==highestProbability {
+                    if map[x,y]!>=highestProbability {
                         possiblePositions.append(Position(x: x,y: y))
                     }
                 }
@@ -114,6 +119,11 @@ class ProbabilityAIPlayer : RandomAIPlayer {
                         if shoots![shipX,y] == false {
                             shipFits = false
                             break
+                        }
+                        if let ship = board.shipAtPosition(x: shipX, y: y) {
+                            if ship.isDestroyed() {
+                                shipFits = false
+                            }
                         }
                     }
                     if shipFits {
@@ -147,6 +157,7 @@ class ProbabilityAIPlayer : RandomAIPlayer {
     }
     
     override func getNextShootPosition() -> Position? {
+        
         var position: Position?
         if let board = opponentBoard {
             let map = Array2D<Int>(columns: board.width, rows: board.height)
