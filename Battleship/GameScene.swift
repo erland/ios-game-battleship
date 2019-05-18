@@ -72,11 +72,13 @@ class GameScene: SKScene {
         waitingForShoot = true
     }
     
-    func shoot(x: Int, y: Int) {
-        var hitShip: Ship?
-        if x>=0 && x<myBoardView.board.width && y>=0 && y<myBoardView.board.height {
-            hitShip = processShoot(boardView: myBoardView, x: x, y: y, small: true, won: false)
-        }
+    func opponentShoot(x: Int, y: Int) {
+        let hitShip = myBoardView.board.shipAtPosition(x: x, y: y)
+        let hit = (hitShip != nil)
+        hitShip?.shoot(x: x, y: y)
+        myBoardView.board.registerShoot(x: x, y: y, hit: hit)
+        processShootResult(boardView: myBoardView, x: x, y: y, hit: hit, small: true, won: false)
+        
         if let hitShip = hitShip {
             if hitShip.isDestroyed() {
                 battleshipDelegate.shootResult(playerName: myBoardView.board.name, x: x, y: y, hit: true, destroyedShip: hitShip)
@@ -102,47 +104,46 @@ class GameScene: SKScene {
     }
     
     func shootResult(x: Int, y: Int, hit: Bool) {
-        processShoot(boardView: opponentBoardView, x: x, y: y, small: false, won: true)
+        processShootResult(boardView: opponentBoardView, x: x, y: y, hit: hit, small: false, won: true)
     }
 
-    private func processShoot(boardView: BoardView, x: Int, y: Int, small: Bool, won: Bool) -> Ship? {
-        let selectedShip = boardView.board.shipAtPosition(x: x,
-                                                                  y: y)
-        if let selectedShip = selectedShip {
-            if selectedShip.shoot(x: x, y: y) {
-                var texture: SKTexture? = self.hitTexture
-                if small {
-                    texture = smallHitTexture
-                }
-                let hit = SKSpriteNode(texture: texture!)
-                hit.anchorPoint = CGPoint(x: 0, y: 1)
-                hit.position = CGPoint(x: CGFloat(x)*boardView.cellSize,
-                                       y: -CGFloat(y)*boardView.cellSize)
-                boardView.addChild(hit)
-                if selectedShip.isDestroyed() {
-                    if let shipView = boardView.viewForShip(ship: selectedShip)  {
+    private func processShootResult(boardView: BoardView, x: Int, y: Int, hit: Bool, small: Bool, won: Bool) {
+        var texture: SKTexture?
+        if hit {
+            if small {
+                texture = smallHitTexture
+            }else {
+                texture = self.hitTexture
+            }
+        }else {
+            if small {
+                texture = smallMissTexture
+            }else {
+                texture = missTexture
+            }
+        }
+        let hitSprite = SKSpriteNode(texture: texture!)
+        hitSprite.anchorPoint = CGPoint(x: 0, y: 1)
+        hitSprite.position = CGPoint(x: CGFloat(x)*boardView.cellSize,
+                               y: -CGFloat(y)*boardView.cellSize)
+        hitSprite.zPosition = 20
+        boardView.addChild(hitSprite)
+
+        if hit {
+            let hitShip = boardView.board.shipAtPosition(x: x, y: y)
+            if let hitShip = hitShip {
+                if hitShip.isDestroyed() {
+                    if let shipView = boardView.viewForShip(ship: hitShip)  {
                         shipView.alpha=1
                     }
                 }
-                if boardView.board.isAllShipsDestroyed() {
+                if boardView.board.ships.count == 5 && boardView.board.isAllShipsDestroyed() {
                     battleshipDelegate.gameOver(board: opponentBoardView.board, won: won)
                 }
-                return selectedShip
             }
-        }else {
-            var texture: SKTexture? = self.missTexture
-            if !won {
-                texture = smallMissTexture
-            }
-            let hit = SKSpriteNode(texture: texture!)
-            hit.anchorPoint = CGPoint(x: 0, y: 1)
-            hit.position = CGPoint(x: CGFloat(x)*boardView.cellSize,
-                                   y: -CGFloat(y)*boardView.cellSize)
-            boardView.addChild(hit)
         }
-        return nil
-
     }
+    
     private class func createHitTexture(cellSize: CGFloat, strokeColor: UIColor, fillColor: UIColor) -> SKTexture? {
         let size = (cellSize-cellSize/10.0)
         let shape = SKShapeNode.init(circleOfRadius: size/2.0)

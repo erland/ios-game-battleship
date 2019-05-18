@@ -19,12 +19,14 @@ class Board {
     let board: Array2D<Ship>
     var ships: Set<Ship> = Set()
     var observers: [BoardObserver] = []
+    var shoots: Array2D<Bool>
     
     init(name: String, x: Int, y: Int) {
         self.name = name
         self.width = x
         self.height = y
         self.board = Array2D<Ship>(columns: width, rows: height)
+        self.shoots = Array2D<Bool>(columns: width, rows: height)
     }
     func attachObserver(observer: BoardObserver) {
         for ship in ships {
@@ -150,6 +152,12 @@ class Board {
         }
         addShipToBoard(ship: ship)
         //debugBoard()
+    }
+    
+    func registerShoot(x: Int, y: Int, hit: Bool) {
+        if x>=0 && x<width && y>=0 && y<height {
+            shoots[x,y] = hit
+        }
     }
 
     func debugBoard() {

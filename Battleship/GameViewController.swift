@@ -184,7 +184,7 @@ class GameViewController: UIViewController, BattleshipDelegate {
             if skView.scene is GameScene {
                 let gameScene = skView.scene as! GameScene
                 print("Forwarding AI shoot at \(x),\(y)")
-                gameScene.shoot(x: x, y: y)
+                gameScene.opponentShoot(x: x, y: y)
             }
         }else {
            print("Hoppsan, nu blev det fel")
@@ -198,6 +198,10 @@ class GameViewController: UIViewController, BattleshipDelegate {
             if skView.scene is GameScene {
                 let gameScene = skView.scene as! GameScene
                 print("Forwarding AI result at \(x),\(y)")
+                if let destroyedShip = destroyedShip {
+                    opponentBoard?.addShip(ship: destroyedShip, x: destroyedShip.x, y: destroyedShip.y)
+                }
+                opponentBoard?.registerShoot(x: x, y: y, hit: hit)
                 gameScene.shootResult(x: x, y: y, hit: hit)
             }
             print("AI ready for shoot")

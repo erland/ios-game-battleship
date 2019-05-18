@@ -69,7 +69,13 @@ class Ship : Hashable, NSCopying {
         }
         return result
     }
-
+    
+    func setDestroyed() {
+        for i in 0..<length {
+            hits[i] = true
+        }
+    }
+    
     func isDestroyed() -> Bool {
         for hit in hits {
             if !hit {

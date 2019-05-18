@@ -77,6 +77,7 @@ class BoardView : SKSpriteNode, BoardObserver {
         let shipView = ShipView(ship: ship, cellSize: cellSize)
         shipView.anchorPoint = CGPoint(x: 1.0/(CGFloat(ship.length)*2.0), y: 0.5)
         shipView.name = "ship"
+        shipView.zPosition = 10
         addChild(shipView)
     }
     

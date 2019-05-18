@@ -119,9 +119,11 @@ class BattleshipNetwork : MessageProcessor, ConnectionManager {
         }else if message.message == "placementCompleted" {
             let networkBoard = try! JSONDecoder().decode(NetworkBoard.self, from: message.data)
             let board = Board(name: peer, x: networkBoard.boardWidth, y: networkBoard.boardHeight)
+            /*
             for (_,ship) in networkBoard.getShipObjects().enumerated() {
                 board.addShip(ship: ship, x: ship.x, y: ship.y)
             }
+            */
             print("Received placementCompleted on \(board.width),\(board.height) board")
             self.battleshipDelegate.placementComplete(board: board)
         }else if message.message == "readyForShoot" {
@@ -141,7 +143,9 @@ class BattleshipNetwork : MessageProcessor, ConnectionManager {
             let networkShootResult = try! JSONDecoder().decode(NetworkShootResult.self, from: message.data)
             print("Received shootResult at \(networkShootResult.x),\(networkShootResult.y) = \(networkShootResult.hit)")
             if networkShootResult.destroyedShip != nil {
-                self.battleshipDelegate.shootResult(playerName: peer, x: networkShootResult.x, y: networkShootResult.y, hit: networkShootResult.hit, destroyedShip: networkShootResult.destroyedShip?.asShipObj())
+                let destroyedShip = networkShootResult.destroyedShip?.asShipObj()
+                destroyedShip?.setDestroyed()
+                self.battleshipDelegate.shootResult(playerName: peer, x: networkShootResult.x, y: networkShootResult.y, hit: networkShootResult.hit, destroyedShip: destroyedShip)
             }else {
                 self.battleshipDelegate.shootResult(playerName: peer, x: networkShootResult.x, y: networkShootResult.y, hit: networkShootResult.hit, destroyedShip: nil)
             }
