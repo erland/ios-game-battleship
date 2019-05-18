@@ -16,4 +16,5 @@ protocol BattleshipDelegate {
     func finishedGame()
     func shoot(playerName: String, x: Int, y: Int)
     func shootResult(playerName: String, x: Int, y: Int, hit: Bool, destroyedShip: Ship?)
+    func gameResult(ships: [Ship], won: Bool)
 }

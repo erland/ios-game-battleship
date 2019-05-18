@@ -61,4 +61,11 @@ class NetworkPlayer : Player {
         // TODO: Pass result on opponent shot to other player
     }
     
+    func gameResult(delegate: BattleshipDelegate, ships: [Ship], won: Bool) {
+        
+        let networkGameResult = NetworkGameResult(ships: ships, won: won)
+
+        network.sendGameResult(player: playerName, gameResult: networkGameResult)
+    }
+
 }

@@ -58,6 +58,22 @@ struct NetworkShip : Codable {
     }
     
 }
+struct NetworkGameResult : Codable {
+    let won: Bool
+    var ships: Array<NetworkShip> = []
+    
+    init(ships: [Ship], won: Bool) {
+        self.won = won
+        for ship in ships {
+            if ship.orientation == Ship.Orientation.Horizontal {
+                self.ships.append(NetworkShip(x: ship.x, y: ship.y, length: ship.length, horizontal: true))
+            }else {
+                self.ships.append(NetworkShip(x: ship.x, y: ship.y, length: ship.length, horizontal: false))
+            }
+        }
+    }
+}
+
 struct NetworkBoard : Codable {
     var ships: Array<NetworkShip?>
     let boardWidth: Int
@@ -139,6 +155,14 @@ class BattleshipNetwork : MessageProcessor, ConnectionManager {
             let networkShoot = try! JSONDecoder().decode(NetworkShoot.self, from: message.data)
             print("Received shoot at \(networkShoot.x),\(networkShoot.y)")
             self.battleshipDelegate.shoot(playerName: peer, x: networkShoot.x, y: networkShoot.y)
+        }else if message.message == "gameResult" {
+            let gameResult = try! JSONDecoder().decode(NetworkGameResult.self, from: message.data)
+            var ships: [Ship] = []
+             for ship in gameResult.ships {
+                ships.append(ship.asShipObj())
+             }
+            print("Received gameResult with \(ships.count) ships")
+            self.battleshipDelegate.gameResult(ships: ships, won: gameResult.won)
         }else if message.message == "shootResult" {
             let networkShootResult = try! JSONDecoder().decode(NetworkShootResult.self, from: message.data)
             print("Received shootResult at \(networkShootResult.x),\(networkShootResult.y) = \(networkShootResult.hit)")
@@ -177,6 +201,11 @@ class BattleshipNetwork : MessageProcessor, ConnectionManager {
         localNetworking?.sendMessage(player: player, message: Message(message: "readyForShoot", data: "{}".data(using: .utf8)!))
     }
     
+    func sendGameResult(player: String, gameResult: NetworkGameResult) {
+        let jsonData = try! JSONEncoder().encode(gameResult)
+        localNetworking?.sendMessage(player: player, message: Message(message: "gameResult", data: jsonData))
+    }
+
     func sendReadyToPlay(player: String?) {
         readyToPlay = true
         let message = Message(message: "readyToPlay", data: "{}".data(using: .utf8)!)

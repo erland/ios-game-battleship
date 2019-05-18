@@ -137,6 +137,7 @@ class GameScene: SKScene {
                         shipView.alpha=1
                     }
                 }
+                print("Checking if gameOver on \(boardView.board.name) count=\(boardView.board.ships.count) and destroyed=\(boardView.board.isAllShipsDestroyed())")
                 if boardView.board.ships.count == 5 && boardView.board.isAllShipsDestroyed() {
                     battleshipDelegate.gameOver(board: opponentBoardView.board, won: won)
                 }

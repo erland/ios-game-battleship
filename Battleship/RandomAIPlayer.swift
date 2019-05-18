@@ -34,7 +34,7 @@ class RandomAIPlayer : Player {
             }while !placed
         }
         self.myBoard = board
-        delegate.placementComplete(board: board)
+        delegate.placementComplete(board: Board(name: board.name, x: board.width, y: board.height))
     }
     
     func placementCompleted(opponentBoard: Board) {
@@ -120,6 +120,14 @@ class RandomAIPlayer : Player {
             }
         }
     }
-    
+    func gameResult(delegate: BattleshipDelegate, ships: [Ship], won: Bool) {
+        var myShips: [Ship] = []
+        if let ships = myBoard?.ships {
+            for ship in ships {
+                myShips.append(ship)
+            }
+        }
+        delegate.gameResult(ships: myShips, won: !won)
+    }
     
 }

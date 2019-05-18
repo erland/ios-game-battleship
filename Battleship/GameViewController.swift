@@ -109,9 +109,17 @@ class GameViewController: UIViewController, BattleshipDelegate {
         }
     }
     func gameOver(board: Board, won: Bool) {
+        var myShips: [Ship] = []
+        for ship in board.ships {
+            myShips.append(ship)
+        }
+        opponentPlayer?.gameResult(delegate: self, ships: myShips, won: won)
+    }
+    
+    func gameResult(ships: [Ship], won: Bool) {
         let skView = view as! SKView
         // Create and configure the scene.
-        let scene = GameOverScene(delegate: self, size: skView.bounds.size, won: won)
+        let scene = GameOverScene(delegate: self, size: skView.bounds.size, won: !won)
         scene.scaleMode = .aspectFill
         
         // Present the scene.
@@ -199,6 +207,7 @@ class GameViewController: UIViewController, BattleshipDelegate {
                 let gameScene = skView.scene as! GameScene
                 print("Forwarding AI result at \(x),\(y)")
                 if let destroyedShip = destroyedShip {
+                    destroyedShip.setDestroyed()
                     opponentBoard?.addShip(ship: destroyedShip, x: destroyedShip.x, y: destroyedShip.y)
                 }
                 opponentBoard?.registerShoot(x: x, y: y, hit: hit)
