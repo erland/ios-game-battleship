@@ -22,9 +22,9 @@ class ProbabilityAIPlayer : RandomAIPlayer {
         }
     }
     
-    private func destroyedShipAtPosition(x: Int, y: Int) -> Bool {
+    private func destroyedShipAtPosition(_ x: Int, _ y: Int) -> Bool {
         for ship in destroyedShips {
-            if ship.contains(x: x, y: y) {
+            if ship.contains(x, y) {
                 return true
             }
         }
@@ -36,7 +36,7 @@ class ProbabilityAIPlayer : RandomAIPlayer {
         for y in y..<(y+length) {
             if shoots![x,y] != nil {
                 if shoots![x,y]! {
-                    if !destroyedShipAtPosition(x: x, y: y) {
+                    if !destroyedShipAtPosition(x, y) {
                         probabilityIncrease = probabilityIncrease + 4
                     }
                 }
@@ -56,7 +56,7 @@ class ProbabilityAIPlayer : RandomAIPlayer {
         for x in x..<(x+length) {
             if shoots![x,y] != nil {
                 if shoots![x,y]! {
-                    if !destroyedShipAtPosition(x: x, y: y) {
+                    if !destroyedShipAtPosition(x, y) {
                         probabilityIncrease = probabilityIncrease + 4
                     }
                 }
@@ -92,7 +92,7 @@ class ProbabilityAIPlayer : RandomAIPlayer {
             for y in 0..<map.rows {
                 if map[x,y] != nil {
                     if map[x,y]!>=highestProbability {
-                        possiblePositions.append(Position(x: x,y: y))
+                        possiblePositions.append(Position(x, y))
                     }
                 }
             }
@@ -121,7 +121,7 @@ class ProbabilityAIPlayer : RandomAIPlayer {
                             shipFits = false
                             break
                         }
-                        if let ship = board.shipAtPosition(x: shipX, y: y) {
+                        if let ship = board.shipAtPosition(shipX, y) {
                             if ship.isDestroyed() {
                                 shipFits = false
                             }

@@ -68,9 +68,9 @@ class GameScene: SKScene {
     }
     
     func opponentShoot(x: Int, y: Int) {
-        let hitShip = myBoardView.board.shipAtPosition(x: x, y: y)
+        let hitShip = myBoardView.board.shipAtPosition(x, y)
         let hit = (hitShip != nil)
-        hitShip?.shoot(x: x, y: y)
+        hitShip?.shoot(x, y)
         myBoardView.board.registerShoot(x: x, y: y, hit: hit)
         
         if let hitShip = hitShip {

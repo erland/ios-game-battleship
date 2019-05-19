@@ -46,7 +46,7 @@ class RandomAIPlayer : Player {
     struct Position {
         let x: Int
         let y: Int
-        init(x: Int, y: Int) {
+        init(_ x: Int, _ y: Int) {
             self.x = x
             self.y = y;
         }
@@ -57,24 +57,24 @@ class RandomAIPlayer : Player {
         
         if nearbyX>0 {
             if shoots![nearbyX-1, nearbyY] == nil {
-                position = Position(x: nearbyX-1, y: nearbyY)
+                position = Position(nearbyX-1, nearbyY)
             }
         }
         if position == nil && nearbyX<shoots!.columns-1 {
             if shoots![nearbyX+1, nearbyY] == nil {
-                position = Position(x: nearbyX+1, y: nearbyY)
+                position = Position(nearbyX+1, nearbyY)
             }
         }
         
         if position == nil {
             if nearbyY>0 {
                 if shoots![nearbyX, nearbyY-1] == nil {
-                    position = Position(x: nearbyX, y: nearbyY-1)
+                    position = Position(nearbyX, nearbyY-1)
                 }
             }
             if position == nil && nearbyY<shoots!.rows-1 {
                 if shoots![nearbyX, nearbyY+1] == nil {
-                    position = Position(x: nearbyX, y: nearbyY+1)
+                    position = Position(nearbyX, nearbyY+1)
                 }
             }
             
@@ -89,8 +89,8 @@ class RandomAIPlayer : Player {
         var position: Position?
         if let board = opponentBoard {
             repeat {
-                position = Position(x: Int.random(in: 0..<board.width),
-                                    y: Int.random(in: 0..<board.height))
+                position = Position(Int.random(in: 0..<board.width),
+                                    Int.random(in: 0..<board.height))
             }while(shoots?[position!.x, position!.y] != nil)
         }
         return position
@@ -118,8 +118,8 @@ class RandomAIPlayer : Player {
     
     func shoot(delegate: BattleshipDelegate, x: Int, y: Int) {
         if let board = myBoard {
-            let ship = board.shipAtPosition(x: x, y: y)
-            let result = ship?.shoot(x: x, y: y)
+            let ship = board.shipAtPosition(x, y)
+            let result = ship?.shoot(x, y)
             if result != nil {
                 if ship!.isDestroyed() {
                     delegate.shootResult(playerName: playerName, x: x, y: y, hit: result!, destroyedShip: ship)

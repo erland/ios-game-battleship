@@ -106,8 +106,7 @@ class PlacementScene: SKScene {
     func selectShip(position: CGPoint) {
         let cellX = Int((position.x-gameBoard.position.x)/gameBoard.cellSize)
         let cellY = Int((gameBoard.position.y-position.y)/gameBoard.cellSize)
-        selectedShip = gameBoard.board.shipAtPosition(x: cellX,
-                                                y: cellY)
+        selectedShip = gameBoard.board.shipAtPosition(cellX, cellY)
         if let selectedShip = selectedShip {
             selectedShip.selected = true
             selectedOffsetX = cellX-selectedShip.x

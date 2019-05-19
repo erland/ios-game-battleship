@@ -36,7 +36,7 @@ class Board {
         observers.append(observer)
     }
     
-    func shipAtPosition(x: Int, y: Int) -> Ship? {
+    func shipAtPosition(_ x: Int, _ y: Int) -> Ship? {
         if x>=0 && x<width && y>=0 && y<height {
             return board[x, y]
         }else {

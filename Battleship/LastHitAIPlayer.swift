@@ -18,24 +18,24 @@ class LastHitAIPlayer : RandomAIPlayer {
 
         if nearbyX>0 {
             if shoots![nearbyX-1, nearbyY] == nil {
-                position = Position(x: nearbyX-1, y: nearbyY)
+                position = Position(nearbyX-1, nearbyY)
             }
         }
         if position == nil && nearbyX<shoots!.columns-1 {
             if shoots![nearbyX+1, nearbyY] == nil {
-                position = Position(x: nearbyX+1, y: nearbyY)
+                position = Position(nearbyX+1, nearbyY)
             }
         }
 
         if position == nil {
             if nearbyY>0 {
                 if shoots![nearbyX, nearbyY-1] == nil {
-                    position = Position(x: nearbyX, y: nearbyY-1)
+                    position = Position(nearbyX, nearbyY-1)
                 }
             }
             if position == nil && nearbyY<shoots!.rows-1 {
                 if shoots![nearbyX, nearbyY+1] == nil {
-                    position = Position(x: nearbyX, y: nearbyY+1)
+                    position = Position(nearbyX, nearbyY+1)
                 }
             }
             
@@ -77,7 +77,7 @@ class LastHitAIPlayer : RandomAIPlayer {
     
     override func shootResult(delegate: BattleshipDelegate, x: Int, y: Int, hit: Bool, destroyedShip: Ship?) {
         if hit {
-            lastHit = Position(x: x, y: y)
+            lastHit = Position(x, y)
         }
         super.shootResult(delegate: delegate, x: x, y: y, hit: hit, destroyedShip: destroyedShip)
     }

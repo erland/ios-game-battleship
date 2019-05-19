@@ -125,7 +125,7 @@ class GameViewController: UIViewController, BattleshipDelegate {
         
         // Add missing ships which haven't been destroyed already
         for ship in ships {
-            let destroyedShip = opponentBoard?.shipAtPosition(x: ship.x, y: ship.y)
+            let destroyedShip = opponentBoard?.shipAtPosition(ship.x, ship.y)
             if destroyedShip == nil {
                 opponentBoard?.addShip(ship: ship, x: ship.x, y: ship.y)
             }

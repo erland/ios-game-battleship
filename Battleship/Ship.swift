@@ -39,7 +39,7 @@ class Ship : Hashable, NSCopying {
         observers.append(observer)
     }
     
-    func shoot(x: Int, y: Int) -> Bool {
+    func shoot(_ x: Int, _ y: Int) -> Bool {
         var result: Bool = false
         if orientation==Orientation.Horizontal {
             if y==self.y && x>=self.x && x < self.x+length {
@@ -56,7 +56,7 @@ class Ship : Hashable, NSCopying {
         return result
     }
     
-    func contains(x: Int, y: Int) -> Bool {
+    func contains(_ x: Int, _ y: Int) -> Bool {
         var result: Bool = false
         if orientation==Orientation.Horizontal {
             if y==self.y && x>=self.x && x < self.x+length {
