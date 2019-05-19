@@ -117,9 +117,22 @@ class GameViewController: UIViewController, BattleshipDelegate {
     }
     
     func gameResult(ships: [Ship], won: Bool) {
+        if won {
+            gameOver(board: myBoard!, won: !won)
+        }
+        
         let skView = view as! SKView
+        
+        // Add missing ships which haven't been destroyed already
+        for ship in ships {
+            let destroyedShip = opponentBoard?.shipAtPosition(x: ship.x, y: ship.y)
+            if destroyedShip == nil {
+                opponentBoard?.addShip(ship: ship, x: ship.x, y: ship.y)
+            }
+        }
+        
         // Create and configure the scene.
-        let scene = GameOverScene(delegate: self, size: skView.bounds.size, won: !won)
+        let scene = GameOverScene(delegate: self, size: skView.bounds.size, myBoard: myBoard!, opponentBoard: opponentBoard!, won: !won)
         scene.scaleMode = .aspectFill
         
         // Present the scene.
@@ -216,7 +229,7 @@ class GameViewController: UIViewController, BattleshipDelegate {
             print("AI ready for shoot")
             opponentPlayer?.readyForShoot(delegate: self)
         }else if playerName == myBoard?.name{
-            opponentPlayer?.shootResult(x: x, y: y, hit: hit, destroyedShip: destroyedShip)
+            opponentPlayer?.shootResult(delegate: self, x: x, y: y, hit: hit, destroyedShip: destroyedShip)
             
             let skView = view as! SKView
             if skView.scene is GameScene {

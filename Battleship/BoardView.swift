@@ -12,7 +12,9 @@ class BoardView : SKSpriteNode, BoardObserver {
     
     let board: Board
     let cellSize: CGFloat
-    
+    let hitTexture : SKTexture?
+    let missTexture : SKTexture?
+
     init(board: Board, cellSize: CGFloat) {
         self.cellSize = cellSize
         self.board = board
@@ -20,7 +22,19 @@ class BoardView : SKSpriteNode, BoardObserver {
         let texture = BoardView.createBoardTexture(x: board.width, y: board.height, cellSize: cellSize)
         let boardWidth = CGFloat(board.width)*cellSize
         let boardHeight = CGFloat(board.width)*cellSize
+
+        self.hitTexture = BoardView.createHitTexture(cellSize: cellSize, strokeColor: UIColor.green, fillColor: UIColor.green)
+        self.missTexture = BoardView.createHitTexture(cellSize: cellSize, strokeColor: UIColor.darkGray, fillColor: UIColor.darkGray)
+
         super.init(texture: texture, color: UIColor.black, size: CGSize(width: boardWidth, height: boardHeight))
+
+        for y in 0..<board.height {
+            for x in 0..<board.width {
+                if board.shoots[x,y] != nil {
+                    shootAt(x: x, y: y, hit: board.shoots[x,y]!)
+                }
+            }
+        }
         board.attachObserver(observer: self)
     }
     
@@ -86,6 +100,31 @@ class BoardView : SKSpriteNode, BoardObserver {
             shipView.removeFromParent()
         }
     }
+    
+    func shootAt(x: Int, y: Int, hit: Bool) {
+        var hitSprite: SKSpriteNode?
+        if hit {
+            hitSprite = SKSpriteNode(texture: hitTexture)
+        }else {
+            hitSprite = SKSpriteNode(texture: missTexture)
+        }
+        hitSprite!.anchorPoint = CGPoint(x: 0, y: 1)
+        hitSprite!.position = CGPoint(x: CGFloat(x)*cellSize,
+                                     y: -CGFloat(y)*cellSize)
+        hitSprite!.zPosition = 20
+        addChild(hitSprite!)
+
+    }
+
+    private class func createHitTexture(cellSize: CGFloat, strokeColor: UIColor, fillColor: UIColor) -> SKTexture? {
+        let size = (cellSize-cellSize/10.0)
+        let shape = SKShapeNode.init(circleOfRadius: size/2.0)
+        shape.fillColor = fillColor
+        shape.strokeColor = strokeColor
+        let view = SKView(frame: CGRect(x: 0, y: 0, width: size, height: size))
+        return view.texture(from: shape)
+    }
+    
 
     func viewForShip(ship: Ship) -> ShipView? {
         var result: ShipView?

@@ -33,11 +33,6 @@ class GameScene: SKScene {
         myBoardView.anchorPoint = CGPoint(x: 0, y: 1)
         myBoardView.position = CGPoint(x: myBoardView.size.width-margin,y: size.height-margin/2-opponentBoardView.size.height-margin/2-15)
         
-        self.hitTexture = GameScene.createHitTexture(cellSize: cellSize, strokeColor: UIColor.green, fillColor: UIColor.green)
-        self.missTexture = GameScene.createHitTexture(cellSize: cellSize, strokeColor: UIColor.darkGray, fillColor: UIColor.darkGray)
-        self.smallHitTexture = GameScene.createHitTexture(cellSize: cellSize/2, strokeColor: UIColor.green, fillColor: UIColor.green)
-        self.smallMissTexture = GameScene.createHitTexture(cellSize: cellSize/2, strokeColor: UIColor.darkGray, fillColor: UIColor.darkGray)
-
         instructionText = SKLabelNode(fontNamed:"Chalkduster")
         instructionText.color = UIColor.white
         instructionText.fontSize = 18
@@ -77,7 +72,6 @@ class GameScene: SKScene {
         let hit = (hitShip != nil)
         hitShip?.shoot(x: x, y: y)
         myBoardView.board.registerShoot(x: x, y: y, hit: hit)
-        processShootResult(boardView: myBoardView, x: x, y: y, hit: hit, small: true, won: false)
         
         if let hitShip = hitShip {
             if hitShip.isDestroyed() {
@@ -104,54 +98,11 @@ class GameScene: SKScene {
     }
     
     func shootResult(x: Int, y: Int, hit: Bool) {
-        processShootResult(boardView: opponentBoardView, x: x, y: y, hit: hit, small: false, won: true)
-    }
-
-    private func processShootResult(boardView: BoardView, x: Int, y: Int, hit: Bool, small: Bool, won: Bool) {
-        var texture: SKTexture?
-        if hit {
-            if small {
-                texture = smallHitTexture
-            }else {
-                texture = self.hitTexture
-            }
-        }else {
-            if small {
-                texture = smallMissTexture
-            }else {
-                texture = missTexture
-            }
+        print("Checking if gameOver count=\(opponentBoardView.board.ships.count) and allShipsDestroyed=\(opponentBoardView.board.isAllShipsDestroyed())")
+        if opponentBoardView.board.ships.count == myBoardView.board.ships.count && opponentBoardView.board.isAllShipsDestroyed() {
+            battleshipDelegate.gameOver(board: myBoardView.board, won: true)
         }
-        let hitSprite = SKSpriteNode(texture: texture!)
-        hitSprite.anchorPoint = CGPoint(x: 0, y: 1)
-        hitSprite.position = CGPoint(x: CGFloat(x)*boardView.cellSize,
-                               y: -CGFloat(y)*boardView.cellSize)
-        hitSprite.zPosition = 20
-        boardView.addChild(hitSprite)
 
-        if hit {
-            let hitShip = boardView.board.shipAtPosition(x: x, y: y)
-            if let hitShip = hitShip {
-                if hitShip.isDestroyed() {
-                    if let shipView = boardView.viewForShip(ship: hitShip)  {
-                        shipView.alpha=1
-                    }
-                }
-                print("Checking if gameOver on \(boardView.board.name) count=\(boardView.board.ships.count) and destroyed=\(boardView.board.isAllShipsDestroyed())")
-                if boardView.board.ships.count == 5 && boardView.board.isAllShipsDestroyed() {
-                    battleshipDelegate.gameOver(board: opponentBoardView.board, won: won)
-                }
-            }
-        }
-    }
-    
-    private class func createHitTexture(cellSize: CGFloat, strokeColor: UIColor, fillColor: UIColor) -> SKTexture? {
-        let size = (cellSize-cellSize/10.0)
-        let shape = SKShapeNode.init(circleOfRadius: size/2.0)
-        shape.fillColor = fillColor
-        shape.strokeColor = strokeColor
-        let view = SKView(frame: CGRect(x: 0, y: 0, width: size, height: size))
-        return view.texture(from: shape)
     }
 
 }

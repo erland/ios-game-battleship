@@ -11,6 +11,7 @@ import SpriteKit
 protocol BoardObserver {
     func shipAdded(ship: Ship)
     func shipRemoved(ship: Ship)
+    func shootAt(x: Int, y: Int, hit: Bool)
 }
 class Board {
     let name: String
@@ -157,6 +158,9 @@ class Board {
     func registerShoot(x: Int, y: Int, hit: Bool) {
         if x>=0 && x<width && y>=0 && y<height {
             shoots[x,y] = hit
+            for observer in observers {
+                observer.shootAt(x: x, y: y, hit: hit)
+            }
         }
     }
 

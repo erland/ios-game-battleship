@@ -9,7 +9,6 @@
 class ProbabilityAIPlayer : RandomAIPlayer {
     var probabilityMap: Array2D<Int>?
     var ships: [Int] = []
-    var destroyedShips : [Ship] = []
     var variation = 6
     
     override init(name: String) {
@@ -195,8 +194,7 @@ class ProbabilityAIPlayer : RandomAIPlayer {
         }
     }
     
-    override func shootResult(x: Int, y: Int, hit: Bool, destroyedShip: Ship?) {
-        super.shootResult(x: x, y: y, hit: hit, destroyedShip: destroyedShip)
+    override func shootResult(delegate: BattleshipDelegate, x: Int, y: Int, hit: Bool, destroyedShip: Ship?) {
         if hit {
             if let destroyedShip = destroyedShip {
                 var foundIndex = 0
@@ -206,10 +204,10 @@ class ProbabilityAIPlayer : RandomAIPlayer {
                         break
                     }
                 }
-                destroyedShips.append(destroyedShip)
                 ships.remove(at: foundIndex)
             }
         }
+        super.shootResult(delegate: delegate, x: x, y: y, hit: hit, destroyedShip: destroyedShip)
     }
 
 }

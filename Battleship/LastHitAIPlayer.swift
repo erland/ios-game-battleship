@@ -75,10 +75,10 @@ class LastHitAIPlayer : RandomAIPlayer {
         return position
     }
     
-    override func shootResult(x: Int, y: Int, hit: Bool, destroyedShip: Ship?) {
-        super.shootResult(x: x, y: y, hit: hit, destroyedShip: destroyedShip)
+    override func shootResult(delegate: BattleshipDelegate, x: Int, y: Int, hit: Bool, destroyedShip: Ship?) {
         if hit {
             lastHit = Position(x: x, y: y)
         }
+        super.shootResult(delegate: delegate, x: x, y: y, hit: hit, destroyedShip: destroyedShip)
     }
 }

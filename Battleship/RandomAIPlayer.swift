@@ -13,6 +13,7 @@ class RandomAIPlayer : Player {
     var myBoard : Board?
     let playerName: String
     var shoots: Array2D<Bool>?
+    var destroyedShips : [Ship] = []
 
     init(name: String) {
         playerName = name
@@ -101,8 +102,18 @@ class RandomAIPlayer : Player {
         delegate.shoot(playerName: playerName, x: position!.x, y: position!.y)
     }
     
-    func shootResult(x: Int, y: Int, hit: Bool, destroyedShip: Ship?) {
+    func shootResult(delegate: BattleshipDelegate, x: Int, y: Int, hit: Bool, destroyedShip: Ship?) {
         shoots?[x,y] = hit
+        if destroyedShip != nil {
+            destroyedShips.append(destroyedShip!)
+            if destroyedShips.count == myBoard?.ships.count {
+                var myShips: [Ship] = []
+                for ship in myBoard!.ships {
+                    myShips.append(ship)
+                }
+                delegate.gameResult(ships: myShips, won: true)
+            }
+        }
     }
     
     func shoot(delegate: BattleshipDelegate, x: Int, y: Int) {
@@ -121,13 +132,15 @@ class RandomAIPlayer : Player {
         }
     }
     func gameResult(delegate: BattleshipDelegate, ships: [Ship], won: Bool) {
-        var myShips: [Ship] = []
-        if let ships = myBoard?.ships {
-            for ship in ships {
-                myShips.append(ship)
+        if won {
+            var myShips: [Ship] = []
+            if let ships = myBoard?.ships {
+                for ship in ships {
+                    myShips.append(ship)
+                }
             }
+            delegate.gameResult(ships: myShips, won: !won)
         }
-        delegate.gameResult(ships: myShips, won: !won)
     }
     
 }
