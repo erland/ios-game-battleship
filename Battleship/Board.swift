@@ -77,13 +77,13 @@ class Board {
     func validateNewPosition(ship: Ship, x: Int, y: Int, orientation: Ship.Orientation) -> Bool {
         if orientation == Ship.Orientation.Horizontal {
             for offset in 0..<ship.length {
-                if x+offset>=width || board[x+offset, y] != nil {
+                if x+offset<0 || x+offset>=width || board[x+offset, y] != nil {
                     return false
                 }
             }
         }else {
             for offset in 0..<ship.length {
-                if y-offset<0 || board[x, y-offset] != nil {
+                if y-offset<0 || y-offset>=height || board[x, y-offset] != nil {
                     return false
                 }
             }
