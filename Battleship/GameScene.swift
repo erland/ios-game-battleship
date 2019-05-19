@@ -91,9 +91,11 @@ class GameScene: SKScene {
         let cellX = Int((position.x-opponentBoardView.position.x)/opponentBoardView.cellSize)
         let cellY = Int((opponentBoardView.position.y-position.y)/opponentBoardView.cellSize)
         if cellX>=0 && cellX<opponentBoardView.board.width && cellY>=0 && cellY<opponentBoardView.board.height {
-            waitingForShoot = false
-            instructionText.text = "Waiting for opponent"
-            battleshipDelegate.shoot(playerName: myBoardView.board.name, x: cellX, y: cellY)
+            if opponentBoardView.board.shoots[cellX,cellY] == nil {
+                waitingForShoot = false
+                instructionText.text = "Waiting for opponent"
+                battleshipDelegate.shoot(playerName: myBoardView.board.name, x: cellX, y: cellY)
+            }
         }
     }
     
