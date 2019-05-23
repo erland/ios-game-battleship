@@ -18,10 +18,10 @@ class ShipView : SKSpriteNode, ShipObserver {
     init(ship: Ship, cellSize: CGFloat) {
         self.cellSize = cellSize
         self.ship = ship
-        self.mainTexture = SKTexture(imageNamed: "ship\(ship.length)")
+        self.mainTexture = SKTexture(imageNamed: "shadowship\(ship.length)")
         self.selectedTexture = ShipView.createShipTexture(length: ship.length, cellSize: cellSize, borderColor: UIColor.red, fillColor: UIColor.white)
         self.destroyedTexture = ShipView.createShipTexture(length: ship.length, cellSize: cellSize, borderColor: UIColor.red, fillColor: UIColor.red)
-        super.init(texture: mainTexture, color: UIColor.black, size: CGSize(width: CGFloat(ship.length)*cellSize, height: cellSize))
+        super.init(texture: mainTexture, color: UIColor.black, size: CGSize(width: CGFloat(ship.length)*cellSize, height: cellSize*2))
         ship.attachObserver(observer: self)
         anchorPoint = CGPoint(x: 0, y: 1)
         shipUpdated(ship: ship)
@@ -32,11 +32,14 @@ class ShipView : SKSpriteNode, ShipObserver {
     }
     
     private class func createShipTexture(length: Int, cellSize: CGFloat, borderColor: UIColor, fillColor: UIColor) -> SKTexture? {
-        let texture = SKTexture.init(imageNamed: "ship\(length)")
-        let sprite = SKSpriteNode.init(texture: texture, size: CGSize(width: CGFloat(length)*cellSize, height: cellSize))
+        let texture = SKTexture.init(imageNamed: "shadowship\(length)")
+        let sprite = SKSpriteNode.init(texture: texture, size: CGSize(width: CGFloat(length)*cellSize, height: cellSize*2))
         sprite.alpha = 0.5
-        let shape = SKShapeNode.init(rectOf: CGSize(width: CGFloat(length)*cellSize,
-                                                    height: cellSize), cornerRadius: cellSize/4)
+        sprite.position = CGPoint(x: 0,y: cellSize/2)
+        let shape = SKShapeNode.init(rect: CGRect(origin: CGPoint(x: -CGFloat(length)*cellSize/2.0,y: cellSize/2),
+                                                  size: CGSize(width: CGFloat(length)*cellSize,
+                                                    height: cellSize)),
+                                     cornerRadius: cellSize/4)
         shape.fillColor = fillColor
         shape.strokeColor = borderColor
         shape.addChild(sprite)
@@ -45,14 +48,17 @@ class ShipView : SKSpriteNode, ShipObserver {
     }
     
     func shipUpdated(ship: Ship) {
-        let positionX = CGFloat(ship.x)*cellSize+cellSize/2.0
-        let positionY = -CGFloat(ship.y)*cellSize-cellSize/2.0
+        var positionX = CGFloat(ship.x)*cellSize+cellSize/2.0
+        var positionY = -CGFloat(ship.y)*cellSize-cellSize/2.0
         self.position = CGPoint(x: positionX, y: positionY)
         if ship.orientation == Ship.Orientation.Horizontal {
             self.zRotation = 0
+            positionY=positionY-cellSize/2
         }else {
             self.zRotation = CGFloat.pi/2
+            positionX=positionX+cellSize/2
         }
+        self.position = CGPoint(x: positionX, y: positionY)
         if ship.selected {
             texture = selectedTexture
         }else {
