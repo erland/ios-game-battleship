@@ -18,7 +18,7 @@ class ShipView : SKSpriteNode, ShipObserver {
     init(ship: Ship, cellSize: CGFloat) {
         self.cellSize = cellSize
         self.ship = ship
-        self.mainTexture = ShipView.createShipTexture(length: ship.length, cellSize: cellSize, borderColor: UIColor.yellow, fillColor: UIColor.lightGray)
+        self.mainTexture = SKTexture(imageNamed: "ship\(ship.length)")
         self.selectedTexture = ShipView.createShipTexture(length: ship.length, cellSize: cellSize, borderColor: UIColor.red, fillColor: UIColor.white)
         self.destroyedTexture = ShipView.createShipTexture(length: ship.length, cellSize: cellSize, borderColor: UIColor.red, fillColor: UIColor.red)
         super.init(texture: mainTexture, color: UIColor.black, size: CGSize(width: CGFloat(ship.length)*cellSize, height: cellSize))
@@ -32,11 +32,14 @@ class ShipView : SKSpriteNode, ShipObserver {
     }
     
     private class func createShipTexture(length: Int, cellSize: CGFloat, borderColor: UIColor, fillColor: UIColor) -> SKTexture? {
+        let texture = SKTexture.init(imageNamed: "ship\(length)")
+        let sprite = SKSpriteNode.init(texture: texture, size: CGSize(width: CGFloat(length)*cellSize, height: cellSize))
+        sprite.alpha = 0.5
         let shape = SKShapeNode.init(rectOf: CGSize(width: CGFloat(length)*cellSize,
                                                     height: cellSize), cornerRadius: cellSize/4)
         shape.fillColor = fillColor
         shape.strokeColor = borderColor
-        
+        shape.addChild(sprite)
         let view = SKView(frame: CGRect(x: 0, y: 0, width: CGFloat(length)*cellSize, height: cellSize))
         return view.texture(from: shape)
     }

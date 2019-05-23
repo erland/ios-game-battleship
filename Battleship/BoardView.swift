@@ -45,10 +45,12 @@ class BoardView : SKSpriteNode, BoardObserver {
     private class func createBoardTexture(x: Int, y: Int, cellSize: CGFloat) -> SKTexture? {
         let boardWidth = CGFloat(x)*cellSize
         let boardHeight = CGFloat(y)*cellSize
-        let shape = SKShapeNode.init(rectOf: CGSize(width: boardWidth,
-                                                    height: boardHeight))
-        shape.fillColor = UIColor.blue
-        shape.strokeColor = UIColor.white
+        let texture = SKTexture(imageNamed: "water")
+        let shape = SKSpriteNode.init(texture: texture, size: CGSize(width: boardWidth, height: boardHeight))
+        let border = SKShapeNode.init(rectOf: CGSize(width: boardWidth,
+                                                     height: boardHeight))
+        border.strokeColor = UIColor.white
+        shape.addChild(border)
         for row in 1..<(y) {
             let line = BoardView.createLine(anchor: CGPoint(x: -boardWidth/2, y: -boardHeight/2),
                                         from: CGPoint(x: 0.0, y: CGFloat(row)*cellSize),
