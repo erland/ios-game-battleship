@@ -19,9 +19,10 @@ class BoardView : SKSpriteNode, BoardObserver {
     init(board: Board, cellSize: CGFloat, scale: CGFloat) {
         self.cellSize = cellSize
         self.board = board
-        self.scale = scale
+        self.scale = cellSize/50.0
         
         let texture = BoardView.createBoardTexture(x: board.width, y: board.height, cellSize: cellSize)
+        let gridTexture = BoardView.createBoardGridTexture(x: board.width, y: board.height, cellSize: cellSize)
         let boardWidth = CGFloat(board.width)*cellSize
         let boardHeight = CGFloat(board.width)*cellSize
 
@@ -30,7 +31,13 @@ class BoardView : SKSpriteNode, BoardObserver {
         self.missTexture = BoardView.createHitTexture(cellSize: cellSize, strokeColor: missColor, fillColor: missColor)
 
         super.init(texture: texture, color: UIColor.black, size: CGSize(width: boardWidth, height: boardHeight))
-
+        let gridSprite = SKSpriteNode(texture: gridTexture)
+        gridSprite.anchorPoint = CGPoint(x: 0.0,y: 1.0)
+        gridSprite.position = CGPoint(x: -1.0, y: 1.0)
+        addChild(gridSprite)
+        let shader = SKShader(fileNamed: "Water.fsh")
+        self.shader = shader
+        
         for y in 0..<board.height {
             for x in 0..<board.width {
                 if board.shoots[x,y] != nil {
@@ -50,28 +57,34 @@ class BoardView : SKSpriteNode, BoardObserver {
         let boardHeight = CGFloat(y)*cellSize
         let texture = SKTexture(imageNamed: "water")
         let shape = SKSpriteNode.init(texture: texture, size: CGSize(width: boardWidth, height: boardHeight))
-        let border = SKShapeNode.init(rectOf: CGSize(width: boardWidth,
-                                                     height: boardHeight))
-        border.strokeColor = UIColor.white
-        shape.addChild(border)
-        for row in 1..<(y) {
-            let line = BoardView.createLine(anchor: CGPoint(x: -boardWidth/2, y: -boardHeight/2),
-                                        from: CGPoint(x: 0.0, y: CGFloat(row)*cellSize),
-                                        to: CGPoint(x: boardWidth, y: CGFloat(row)*cellSize))
-            line.strokeColor = UIColor(red: 0.5, green: 0.7, blue: 0.9, alpha: 0.8)
-            shape.addChild(line)
-        }
-        for column in 1..<(x) {
-            let line = BoardView.createLine(anchor: CGPoint(x: -boardWidth/2, y: -boardHeight/2),
-                                        from: CGPoint(x: CGFloat(column)*cellSize, y: 0),
-                                        to: CGPoint(x: CGFloat(column)*cellSize, y: boardHeight))
-            line.strokeColor = UIColor(red: 0.5, green: 0.7, blue: 0.9, alpha: 0.8)
-            shape.addChild(line)
-        }
         let view = SKView(frame: CGRect(x: 0, y: 0, width: boardWidth, height: boardHeight))
         return view.texture(from: shape)
     }
     
+    private class func createBoardGridTexture(x: Int, y: Int, cellSize: CGFloat) -> SKTexture? {
+        let boardWidth = CGFloat(x)*cellSize
+        let boardHeight = CGFloat(y)*cellSize
+        let border = SKShapeNode.init(rectOf: CGSize(width: boardWidth,
+                                                     height: boardHeight))
+        border.strokeColor = UIColor.white
+        for row in 1..<(y) {
+            let line = BoardView.createLine(anchor: CGPoint(x: -boardWidth/2, y: -boardHeight/2),
+                                            from: CGPoint(x: 0.0, y: CGFloat(row)*cellSize),
+                                            to: CGPoint(x: boardWidth, y: CGFloat(row)*cellSize))
+            line.strokeColor = UIColor(red: 0.5, green: 0.7, blue: 0.9, alpha: 0.8)
+            border.addChild(line)
+        }
+        for column in 1..<(x) {
+            let line = BoardView.createLine(anchor: CGPoint(x: -boardWidth/2, y: -boardHeight/2),
+                                            from: CGPoint(x: CGFloat(column)*cellSize, y: 0),
+                                            to: CGPoint(x: CGFloat(column)*cellSize, y: boardHeight))
+            line.strokeColor = UIColor(red: 0.5, green: 0.7, blue: 0.9, alpha: 0.8)
+            border.addChild(line)
+        }
+        let view = SKView(frame: CGRect(x: 0, y: 0, width: boardWidth, height: boardHeight))
+        return view.texture(from: border)
+    }
+
     private class func createLine(anchor: CGPoint, from:CGPoint, to: CGPoint) -> SKShapeNode {
         let lineShape = SKShapeNode()
         let path = CGMutablePath()

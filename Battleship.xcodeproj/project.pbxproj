@@ -13,6 +13,7 @@
 		DC65DE282297139C0029B105 /* Explosion.sks in Resources */ = {isa = PBXBuildFile; fileRef = DC65DE272297139C0029B105 /* Explosion.sks */; };
 		DC65DE2C229719E40029B105 /* Smoke.sks in Resources */ = {isa = PBXBuildFile; fileRef = DC65DE2B229719E40029B105 /* Smoke.sks */; };
 		DC65DE2E22971A3E0029B105 /* Fire.sks in Resources */ = {isa = PBXBuildFile; fileRef = DC65DE2D22971A3E0029B105 /* Fire.sks */; };
+		DC65DE302297A9B50029B105 /* Water.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DC65DE2F2297A9B50029B105 /* Water.fsh */; };
 		DCC84C252275EA2B00BA0668 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC84C242275EA2B00BA0668 /* AppDelegate.swift */; };
 		DCC84C2B2275EA2B00BA0668 /* PlacementScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC84C2A2275EA2B00BA0668 /* PlacementScene.swift */; };
 		DCC84C2D2275EA2B00BA0668 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC84C2C2275EA2B00BA0668 /* GameViewController.swift */; };
@@ -41,6 +42,7 @@
 		DC65DE272297139C0029B105 /* Explosion.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Explosion.sks; sourceTree = "<group>"; };
 		DC65DE2B229719E40029B105 /* Smoke.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Smoke.sks; sourceTree = "<group>"; };
 		DC65DE2D22971A3E0029B105 /* Fire.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Fire.sks; sourceTree = "<group>"; };
+		DC65DE2F2297A9B50029B105 /* Water.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Water.fsh; sourceTree = "<group>"; };
 		DCC84C212275EA2B00BA0668 /* Battleship.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Battleship.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCC84C242275EA2B00BA0668 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DCC84C2A2275EA2B00BA0668 /* PlacementScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacementScene.swift; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 				DC65DE272297139C0029B105 /* Explosion.sks */,
 				DC65DE2B229719E40029B105 /* Smoke.sks */,
 				DC65DE2D22971A3E0029B105 /* Fire.sks */,
+				DC65DE2F2297A9B50029B105 /* Water.fsh */,
 			);
 			path = Battleship;
 			sourceTree = "<group>";
@@ -184,6 +187,7 @@
 			files = (
 				DCC84C302275EA2B00BA0668 /* Main.storyboard in Resources */,
 				DC65DE282297139C0029B105 /* Explosion.sks in Resources */,
+				DC65DE302297A9B50029B105 /* Water.fsh in Resources */,
 				DCC84C322275EA2E00BA0668 /* Assets.xcassets in Resources */,
 				DC65DE2E22971A3E0029B105 /* Fire.sks in Resources */,
 				DC65DE2C229719E40029B105 /* Smoke.sks in Resources */,
