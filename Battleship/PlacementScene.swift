@@ -28,7 +28,7 @@ class PlacementScene: SKScene {
         let margin = size.width/20
         let cellSize = (size.width-margin*2)/CGFloat(gridSize)
         battleshipDelegate = delegate
-        gameBoard = BoardView.init(board: board, cellSize: cellSize)
+        gameBoard = BoardView.init(board: board, cellSize: cellSize, scale:1.0)
         gameBoard.anchorPoint = CGPoint(x: 0, y: 1)
         gameBoard.position = CGPoint(x: margin,y: size.height-margin)
         for (i, ship) in ships.enumerated() {

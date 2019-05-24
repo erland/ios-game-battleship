@@ -19,8 +19,8 @@ class ShipView : SKSpriteNode, ShipObserver {
         self.cellSize = cellSize
         self.ship = ship
         self.mainTexture = SKTexture(imageNamed: "ship\(ship.length)")
-        self.selectedTexture = ShipView.createShipTexture(length: ship.length, cellSize: cellSize, borderColor: UIColor.red, fillColor: UIColor.white)
-        self.destroyedTexture = ShipView.createShipTexture(length: ship.length, cellSize: cellSize, borderColor: UIColor.red, fillColor: UIColor.red)
+        self.selectedTexture = ShipView.createShipTexture(length: ship.length, cellSize: cellSize, borderColor: UIColor.red, fillColor: UIColor.white, alpha: 0.5)
+        self.destroyedTexture = ShipView.createShipTexture(length: ship.length, cellSize: cellSize, borderColor: UIColor.red, fillColor: UIColor.red, alpha: 0.3)
         super.init(texture: mainTexture, color: UIColor.black, size: CGSize(width: CGFloat(ship.length)*cellSize, height: cellSize))
         ship.attachObserver(observer: self)
         anchorPoint = CGPoint(x: 0, y: 1)
@@ -31,7 +31,7 @@ class ShipView : SKSpriteNode, ShipObserver {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private class func createShipTexture(length: Int, cellSize: CGFloat, borderColor: UIColor, fillColor: UIColor) -> SKTexture? {
+    private class func createShipTexture(length: Int, cellSize: CGFloat, borderColor: UIColor, fillColor: UIColor, alpha: CGFloat) -> SKTexture? {
         let texture = SKTexture.init(imageNamed: "ship\(length)")
         let sprite = SKSpriteNode.init(texture: texture, size: CGSize(width: CGFloat(length)*cellSize, height: cellSize))
         sprite.alpha = 0.5
@@ -39,6 +39,7 @@ class ShipView : SKSpriteNode, ShipObserver {
                                                     height: cellSize), cornerRadius: cellSize/4)
         shape.fillColor = fillColor
         shape.strokeColor = borderColor
+        shape.alpha = alpha
         shape.addChild(sprite)
         let view = SKView(frame: CGRect(x: 0, y: 0, width: CGFloat(length)*cellSize, height: cellSize))
         return view.texture(from: shape)

@@ -21,11 +21,11 @@ class GameOverScene: SKScene {
 
         let margin = size.width/20
         let cellSize = (size.width-margin*3)/CGFloat(opponentBoard.width+myBoard.width)
-        self.opponentBoardView = BoardView(board: opponentBoard, cellSize: cellSize)
+        self.opponentBoardView = BoardView(board: opponentBoard, cellSize: cellSize, scale: 0.5)
         opponentBoardView.anchorPoint = CGPoint(x: 0, y: 1)
         opponentBoardView.position = CGPoint(x: margin,y: size.height*0.5-45)
         
-        self.myBoardView = BoardView(board: myBoard, cellSize: cellSize)
+        self.myBoardView = BoardView(board: myBoard, cellSize: cellSize, scale: 0.5)
         myBoardView.anchorPoint = CGPoint(x: 0, y: 1)
         myBoardView.position = CGPoint(x: margin+myBoardView.size.width+margin,y: size.height*0.5-45)
 

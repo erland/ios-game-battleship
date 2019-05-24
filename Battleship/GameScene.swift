@@ -25,11 +25,11 @@ class GameScene: SKScene {
         let margin = size.width/10
         let cellSize = (size.width-margin*2)/CGFloat(opponentBoard.width)
         
-        self.opponentBoardView = BoardView(board: opponentBoard, cellSize: cellSize)
+        self.opponentBoardView = BoardView(board: opponentBoard, cellSize: cellSize, scale: 1.0)
         opponentBoardView.anchorPoint = CGPoint(x: 0, y: 1)
         opponentBoardView.position = CGPoint(x: margin,y: size.height-margin/2-30)
         
-        self.myBoardView = BoardView(board: myBoard, cellSize: cellSize/2)
+        self.myBoardView = BoardView(board: myBoard, cellSize: cellSize/2, scale: 0.5)
         myBoardView.anchorPoint = CGPoint(x: 0, y: 1)
         myBoardView.position = CGPoint(x: myBoardView.size.width-margin,y: size.height-margin/2-opponentBoardView.size.height-margin/2-15)
         

@@ -12,19 +12,22 @@ class BoardView : SKSpriteNode, BoardObserver {
     
     let board: Board
     let cellSize: CGFloat
+    let scale: CGFloat
     let hitTexture : SKTexture?
     let missTexture : SKTexture?
 
-    init(board: Board, cellSize: CGFloat) {
+    init(board: Board, cellSize: CGFloat, scale: CGFloat) {
         self.cellSize = cellSize
         self.board = board
+        self.scale = scale
         
         let texture = BoardView.createBoardTexture(x: board.width, y: board.height, cellSize: cellSize)
         let boardWidth = CGFloat(board.width)*cellSize
         let boardHeight = CGFloat(board.width)*cellSize
 
         self.hitTexture = BoardView.createHitTexture(cellSize: cellSize, strokeColor: UIColor.green, fillColor: UIColor.green)
-        self.missTexture = BoardView.createHitTexture(cellSize: cellSize, strokeColor: UIColor.darkGray, fillColor: UIColor.darkGray)
+        let missColor = UIColor(red: 0.5, green: 0.7, blue: 0.9, alpha: 0.5)
+        self.missTexture = BoardView.createHitTexture(cellSize: cellSize, strokeColor: missColor, fillColor: missColor)
 
         super.init(texture: texture, color: UIColor.black, size: CGSize(width: boardWidth, height: boardHeight))
 
@@ -55,14 +58,14 @@ class BoardView : SKSpriteNode, BoardObserver {
             let line = BoardView.createLine(anchor: CGPoint(x: -boardWidth/2, y: -boardHeight/2),
                                         from: CGPoint(x: 0.0, y: CGFloat(row)*cellSize),
                                         to: CGPoint(x: boardWidth, y: CGFloat(row)*cellSize))
-            line.strokeColor = UIColor.gray
+            line.strokeColor = UIColor(red: 0.5, green: 0.7, blue: 0.9, alpha: 0.8)
             shape.addChild(line)
         }
         for column in 1..<(x) {
             let line = BoardView.createLine(anchor: CGPoint(x: -boardWidth/2, y: -boardHeight/2),
                                         from: CGPoint(x: CGFloat(column)*cellSize, y: 0),
                                         to: CGPoint(x: CGFloat(column)*cellSize, y: boardHeight))
-            line.strokeColor = UIColor.gray
+            line.strokeColor = UIColor(red: 0.5, green: 0.7, blue: 0.9, alpha: 0.8)
             shape.addChild(line)
         }
         let view = SKView(frame: CGRect(x: 0, y: 0, width: boardWidth, height: boardHeight))
@@ -104,18 +107,44 @@ class BoardView : SKSpriteNode, BoardObserver {
     }
     
     func shootAt(x: Int, y: Int, hit: Bool) {
-        var hitSprite: SKSpriteNode?
         if hit {
-            hitSprite = SKSpriteNode(texture: hitTexture)
-        }else {
-            hitSprite = SKSpriteNode(texture: missTexture)
-        }
-        hitSprite!.anchorPoint = CGPoint(x: 0, y: 1)
-        hitSprite!.position = CGPoint(x: CGFloat(x)*cellSize,
-                                     y: -CGFloat(y)*cellSize)
-        hitSprite!.zPosition = 20
-        addChild(hitSprite!)
+            if let explosionPath = Bundle.main.path(forResource: "Explosion", ofType: "sks"),
+                let smokePath = Bundle.main.path(forResource: "Smoke", ofType: "sks"),
+                let firePath = Bundle.main.path(forResource: "Fire", ofType: "sks"),
+                let explosion = NSKeyedUnarchiver.unarchiveObject(withFile: explosionPath) as? SKEmitterNode,
+                let fire = NSKeyedUnarchiver.unarchiveObject(withFile: firePath) as? SKEmitterNode,
+                let smoke = NSKeyedUnarchiver.unarchiveObject(withFile: smokePath) as? SKEmitterNode {
+                
+                explosion.position = CGPoint(x: CGFloat(x)*cellSize+cellSize/2,
+                                             y: -CGFloat(y)*cellSize-cellSize/2)
+                smoke.position = CGPoint(x: CGFloat(x)*cellSize+cellSize/2,
+                                         y: -CGFloat(y)*cellSize-cellSize/2)
+                fire.position = CGPoint(x: CGFloat(x)*cellSize+cellSize/2,
+                                         y: -CGFloat(y)*cellSize-cellSize/2)
+                fire.setScale(0.75*scale)
+                fire.zPosition = 20
+                explosion.setScale(0.75*scale)
+                explosion.zPosition = 20
+                smoke.setScale(0.75*scale)
+                smoke.zPosition = 20
 
+                addChild(smoke)
+                addChild(fire)
+                addChild(explosion)
+            }
+        }else {
+            var hitSprite: SKSpriteNode?
+            if hit {
+                hitSprite = SKSpriteNode(texture: hitTexture)
+            }else {
+                hitSprite = SKSpriteNode(texture: missTexture)
+            }
+            hitSprite!.anchorPoint = CGPoint(x: 0, y: 1)
+            hitSprite!.position = CGPoint(x: CGFloat(x)*cellSize,
+                                         y: -CGFloat(y)*cellSize)
+            hitSprite!.zPosition = 20
+            addChild(hitSprite!)
+        }
     }
 
     private class func createHitTexture(cellSize: CGFloat, strokeColor: UIColor, fillColor: UIColor) -> SKTexture? {
