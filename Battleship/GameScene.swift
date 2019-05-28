@@ -35,7 +35,12 @@ class GameScene: SKScene, BoardObserver {
     var smallMissTexture: SKTexture?
     let instructionText: SKLabelNode
     var waitingForShoot: Bool = true
-    
+    var opponentDestroyedShips : Int = 0
+    let opponentStandingsText: SKLabelNode
+    let myStandingsText: SKLabelNode
+    let opponentStandingsLabel: SKLabelNode
+    let myStandingsLabel: SKLabelNode
+
     init(delegate: BattleshipDelegate, myBoard: Board, opponentBoard: Board, size: CGSize) {
         self.battleshipDelegate = delegate
         let margin = size.width/10
@@ -45,14 +50,38 @@ class GameScene: SKScene, BoardObserver {
         opponentBoardView.anchorPoint = CGPoint(x: 0, y: 1)
         opponentBoardView.position = CGPoint(x: margin,y: size.height-margin/2-30)
         
-        self.myBoardView = BoardView(board: myBoard, cellSize: cellSize/2, scale: 0.5, showShootMarking: true)
+        self.myBoardView = BoardView(board: myBoard, cellSize: cellSize/2.5, scale: 0.5, showShootMarking: true)
         myBoardView.anchorPoint = CGPoint(x: 0, y: 1)
-        myBoardView.position = CGPoint(x: myBoardView.size.width-margin,y: size.height-margin/2-opponentBoardView.size.height-margin/2-15)
+        myBoardView.position = CGPoint(x: size.width/2-myBoardView.size.width/2,y: size.height-margin/2-30-opponentBoardView.size.height-margin/2-30)
         
         instructionText = SKLabelNode(fontNamed:"Chalkduster")
         instructionText.color = UIColor.white
         instructionText.fontSize = 18
         instructionText.position = CGPoint(x:size.width/2.0, y:size.height-30);
+
+        myStandingsText = SKLabelNode(fontNamed:"Chalkduster")
+        myStandingsText.color = UIColor.white
+        myStandingsText.fontSize = cellSize/2
+        myStandingsText.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.left
+        myStandingsText.position = CGPoint(x: margin,y: myBoardView.position.y-myBoardView.size.height/2-cellSize);
+        myStandingsLabel = SKLabelNode(fontNamed:"Chalkduster")
+        myStandingsLabel.color = UIColor.white
+        myStandingsLabel.fontSize = cellSize/2
+        myStandingsLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.left
+        myStandingsLabel.position = CGPoint(x: margin,y: myBoardView.position.y-myBoardView.size.height/2);
+        myStandingsLabel.text = "You:"
+
+        opponentStandingsText = SKLabelNode(fontNamed:"Chalkduster")
+        opponentStandingsText.color = UIColor.white
+        opponentStandingsText.fontSize = cellSize/2
+        opponentStandingsText.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.right
+        opponentStandingsText.position = CGPoint(x: size.width-margin,y: myBoardView.position.y-myBoardView.size.height/2-cellSize);
+        opponentStandingsLabel = SKLabelNode(fontNamed:"Chalkduster")
+        opponentStandingsLabel.color = UIColor.white
+        opponentStandingsLabel.fontSize = cellSize/2
+        opponentStandingsLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.right
+        opponentStandingsLabel.position = CGPoint(x: size.width-margin,y: myBoardView.position.y-myBoardView.size.height/2);
+        opponentStandingsLabel.text = "Him/Her:"
 
         super.init(size: size)
         myBoardView.board.attachObserver(self)
@@ -72,6 +101,12 @@ class GameScene: SKScene, BoardObserver {
         
         instructionText.text = "Fire your canon"
         addChild(instructionText)
+        addChild(myStandingsText)
+        addChild(myStandingsLabel)
+        addChild(opponentStandingsText)
+        addChild(opponentStandingsLabel)
+        myStandingsText.text = "\(opponentBoardView.board.ships.count)/\(myBoardView.board.ships.count)"
+        opponentStandingsText.text = "\(opponentDestroyedShips)/\(myBoardView.board.ships.count)"
 
     }
     func shipAdded(ship: Ship) {
@@ -110,6 +145,8 @@ class GameScene: SKScene, BoardObserver {
         
         if let hitShip = hitShip {
             if hitShip.isDestroyed() {
+                opponentDestroyedShips = opponentDestroyedShips + 1
+                opponentStandingsText.text = "\(opponentDestroyedShips)/\(myBoardView.board.ships.count)"
                 battleshipDelegate.shootResult(playerName: myBoardView.board.name, x: x, y: y, hit: true, destroyedShip: hitShip)
             }else {
                 battleshipDelegate.shootResult(playerName: myBoardView.board.name, x: x, y: y, hit: true, destroyedShip: nil)
@@ -136,6 +173,9 @@ class GameScene: SKScene, BoardObserver {
     
     func shootResult(x: Int, y: Int, hit: Bool) {
         print("Checking if gameOver count=\(opponentBoardView.board.ships.count) and allShipsDestroyed=\(opponentBoardView.board.isAllShipsDestroyed())")
+        if hit {
+            myStandingsText.text = "\(opponentBoardView.board.ships.count)/\(myBoardView.board.ships.count)"
+        }
         if opponentBoardView.board.ships.count == myBoardView.board.ships.count && opponentBoardView.board.isAllShipsDestroyed() {
             battleshipDelegate.gameOver(board: myBoardView.board, won: true)
         }
