@@ -15,12 +15,18 @@ class BoardView : SKSpriteNode, BoardObserver {
     let scale: CGFloat
     let hitTexture : SKTexture?
     let missTexture : SKTexture?
+    let showShootMarking: Bool
+    var lastShootMarking : SKShapeNode?
+    
+    convenience init(board: Board, cellSize: CGFloat, scale: CGFloat) {
+        self.init(board: board, cellSize: cellSize, scale: scale, showShootMarking: false)
+    }
 
-    init(board: Board, cellSize: CGFloat, scale: CGFloat) {
+    init(board: Board, cellSize: CGFloat, scale: CGFloat, showShootMarking: Bool) {
         self.cellSize = cellSize
         self.board = board
         self.scale = cellSize/50.0
-        
+        self.showShootMarking = showShootMarking
         let texture = BoardView.createBoardTexture(x: board.width, y: board.height, cellSize: cellSize)
         let gridTexture = BoardView.createBoardGridTexture(x: board.width, y: board.height, cellSize: cellSize)
         let boardWidth = CGFloat(board.width)*cellSize
@@ -118,8 +124,33 @@ class BoardView : SKSpriteNode, BoardObserver {
             shipView.removeFromParent()
         }
     }
+
+    private func updateLastShootMarking(x: Int, y: Int, hit: Bool) {
+        if showShootMarking {
+            if let lastShootMarking = self.lastShootMarking {
+                lastShootMarking.removeFromParent()
+            }
+            lastShootMarking = SKShapeNode.init(rectOf: CGSize(width: cellSize, height: cellSize))
+            lastShootMarking?.position = CGPoint(x: CGFloat(x)*cellSize+cellSize/2, y: -CGFloat(y)*cellSize-cellSize/2)
+            lastShootMarking?.zPosition=15
+            if hit {
+                lastShootMarking?.strokeColor = UIColor.yellow
+                lastShootMarking?.lineWidth = 2.0
+            }else {
+                lastShootMarking?.strokeColor = UIColor.white
+            }
+            lastShootMarking?.run(
+                SKAction.repeat(
+                    SKAction.sequence([
+                        SKAction.fadeIn(withDuration: 0.1),
+                        SKAction.fadeOut(withDuration: 0.1)]),
+                    count: 10))
+            addChild(lastShootMarking!)
+        }
+    }
     
     func shootAt(x: Int, y: Int, hit: Bool) {
+        updateLastShootMarking(x: x, y: y, hit: hit)
         if hit {
             if let explosionPath = Bundle.main.path(forResource: "Explosion", ofType: "sks"),
                 let smokePath = Bundle.main.path(forResource: "Smoke", ofType: "sks"),

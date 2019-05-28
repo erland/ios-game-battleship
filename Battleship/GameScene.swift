@@ -29,7 +29,7 @@ class GameScene: SKScene {
         opponentBoardView.anchorPoint = CGPoint(x: 0, y: 1)
         opponentBoardView.position = CGPoint(x: margin,y: size.height-margin/2-30)
         
-        self.myBoardView = BoardView(board: myBoard, cellSize: cellSize/2, scale: 0.5)
+        self.myBoardView = BoardView(board: myBoard, cellSize: cellSize/2, scale: 0.5, showShootMarking: true)
         myBoardView.anchorPoint = CGPoint(x: 0, y: 1)
         myBoardView.position = CGPoint(x: myBoardView.size.width-margin,y: size.height-margin/2-opponentBoardView.size.height-margin/2-15)
         
