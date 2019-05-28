@@ -21,6 +21,8 @@ class PlacementScene: SKScene {
     var button: SKSpriteNode
     var buttonText: SKLabelNode
     var battleshipDelegate: BattleshipDelegate
+    var lastTouchX : Int?
+    var lastTouchY : Int?
     
     let gridSize = 10
     
@@ -74,6 +76,8 @@ class PlacementScene: SKScene {
         }else {
             selectShip(position: touchLocation)
             rotateMode = true
+            lastTouchX = Int((touchLocation.x-gameBoard.position.x)/gameBoard.cellSize)
+            lastTouchY = Int((gameBoard.position.y-touchLocation.y)/gameBoard.cellSize)
         }
     }
 
@@ -83,7 +87,12 @@ class PlacementScene: SKScene {
         }
         let touchLocation = touch.location(in: self)
         moveSelectedShip(position: touchLocation)
-        rotateMode = false
+        let x = Int((touchLocation.x-gameBoard.position.x)/gameBoard.cellSize)
+        let y = Int((gameBoard.position.y-touchLocation.y)/gameBoard.cellSize)
+        if lastTouchX != x || lastTouchY != y {
+            rotateMode = false
+        }
+        
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
