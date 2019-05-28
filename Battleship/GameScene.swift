@@ -70,7 +70,7 @@ class GameScene: SKScene, BoardObserver {
         addChild(opponentBoardView)
         addChild(myBoardView)
         
-        instructionText.text = "\(myBoardView.board.name) fire your canon"
+        instructionText.text = "Fire your canon"
         addChild(instructionText)
 
     }
