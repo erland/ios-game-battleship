@@ -98,8 +98,10 @@ class RandomAIPlayer : Player {
     func readyForShoot(delegate: BattleshipDelegate) {
         print("AI preparing to shoot")
         let position = getNextShootPosition()
-        print("AI shooting at \(position!.x),\(position!.y)")
-        delegate.shoot(playerName: playerName, x: position!.x, y: position!.y)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+            print("AI shooting at \(position!.x),\(position!.y)")
+            delegate.shoot(playerName: self.playerName, x: position!.x, y: position!.y)
+        })
     }
     
     func shootResult(delegate: BattleshipDelegate, x: Int, y: Int, hit: Bool, destroyedShip: Ship?) {
