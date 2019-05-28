@@ -51,7 +51,7 @@ class BoardView : SKSpriteNode, BoardObserver {
                 }
             }
         }
-        board.attachObserver(observer: self)
+        board.attachObserver(self)
     }
     
     required init?(coder aDecoder: NSCoder) {

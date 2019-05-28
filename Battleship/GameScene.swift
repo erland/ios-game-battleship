@@ -9,7 +9,23 @@
 import SpriteKit
 import GameplayKit
 
-class GameScene: SKScene {
+extension SKAction {
+    class func shake(duration:CGFloat, amplitudeX:CGFloat, amplitudeY:CGFloat) -> SKAction {
+        let numberOfShakes = duration / 0.015 / 2.0
+        var actionsArray:[SKAction] = []
+        for _ in 1...Int(numberOfShakes) {
+            let dx = CGFloat(arc4random_uniform(UInt32(amplitudeX))) - CGFloat(amplitudeX / 2)
+            let dy = CGFloat(arc4random_uniform(UInt32(amplitudeY))) - CGFloat(amplitudeY / 2)
+            let forward = SKAction.moveBy(x: dx, y:dy, duration: 0.015)
+            let reverse = forward.reversed()
+            actionsArray.append(forward)
+            actionsArray.append(reverse)
+        }
+        return SKAction.sequence(actionsArray)
+    }
+}
+
+class GameScene: SKScene, BoardObserver {
     let battleshipDelegate: BattleshipDelegate
     let opponentBoardView: BoardView
     let myBoardView: BoardView
@@ -39,6 +55,10 @@ class GameScene: SKScene {
         instructionText.position = CGPoint(x:size.width/2.0, y:size.height-30);
 
         super.init(size: size)
+        myBoardView.board.attachObserver(self)
+    }
+    deinit {
+        myBoardView.board.detachObserver(self)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -54,6 +74,21 @@ class GameScene: SKScene {
         addChild(instructionText)
 
     }
+    func shipAdded(ship: Ship) {
+        // Do nothing
+    }
+    
+    func shipRemoved(ship: Ship) {
+        // Do nothing
+    }
+    
+    func shootAt(x: Int, y: Int, hit: Bool) {
+        if hit {
+            self.opponentBoardView.run(SKAction.shake(duration: 0.5, amplitudeX: opponentBoardView.cellSize/2, amplitudeY: opponentBoardView.cellSize/2))
+            self.myBoardView.run(SKAction.shake(duration: 0.5, amplitudeX: myBoardView.cellSize/2, amplitudeY: myBoardView.cellSize/2))
+        }
+    }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else {
             return

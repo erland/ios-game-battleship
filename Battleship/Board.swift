@@ -8,7 +8,7 @@
 
 import SpriteKit
 
-protocol BoardObserver {
+protocol BoardObserver : class {
     func shipAdded(ship: Ship)
     func shipRemoved(ship: Ship)
     func shootAt(x: Int, y: Int, hit: Bool)
@@ -29,11 +29,17 @@ class Board {
         self.board = Array2D<Ship>(columns: width, rows: height)
         self.shoots = Array2D<Bool>(columns: width, rows: height)
     }
-    func attachObserver(observer: BoardObserver) {
+    func attachObserver(_ observer: BoardObserver) {
         for ship in ships {
             observer.shipAdded(ship: ship)
         }
         observers.append(observer)
+    }
+    
+    func detachObserver(_ observer: BoardObserver) {
+        if let index = (self.observers.firstIndex(where: { $0 === observer })) {
+            self.observers.remove(at: index)
+        }
     }
     
     func shipAtPosition(_ x: Int, _ y: Int) -> Ship? {
