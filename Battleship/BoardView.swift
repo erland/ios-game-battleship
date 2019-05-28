@@ -144,7 +144,7 @@ class BoardView : SKSpriteNode, BoardObserver {
                     SKAction.sequence([
                         SKAction.fadeIn(withDuration: 0.1),
                         SKAction.fadeOut(withDuration: 0.1)]),
-                    count: 10))
+                    count: 20))
             addChild(lastShootMarking!)
         }
     }
