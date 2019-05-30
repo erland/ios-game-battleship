@@ -17,52 +17,27 @@ class PlacementScene: SKScene {
     var selectedOffsetX: Int?
     var selectedOffsetY: Int?
     var rotateMode: Bool = false
-    var gameBoard: BoardView
-    var button: SKSpriteNode
-    var buttonText: SKLabelNode
-    var battleshipDelegate: BattleshipDelegate
+    var gameBoard: BoardView?
+    var button: SKSpriteNode?
+    var buttonText: SKLabelNode?
+    var battleshipDelegate: BattleshipDelegate?
     var lastTouchX : Int?
     var lastTouchY : Int?
     
     let gridSize = 10
     
-    init(delegate: BattleshipDelegate, board: Board, ships: [Ship], size: CGSize) {
-        let margin = size.width/20
-        let cellSize = (size.width-margin*2)/CGFloat(gridSize)
+    func setup(delegate: BattleshipDelegate, board: Board, ships: [Ship]) {
         battleshipDelegate = delegate
-        gameBoard = BoardView.init(board: board, cellSize: cellSize, scale:1.0)
-        gameBoard.anchorPoint = CGPoint(x: 0, y: 1)
-        gameBoard.position = CGPoint(x: margin,y: size.height-margin)
+        gameBoard = childNode(withName: "board") as? BoardView
+        gameBoard?.setup(board: board)
         for (i, ship) in ships.enumerated() {
             board.addShip(ship: ship, x: 0, y: i*2)
         }
-
-        button = SKSpriteNode(color: SKColor.lightGray, size: CGSize(width: 150, height: 44))
-        buttonText = SKLabelNode(fontNamed:"Chalkduster")
-        super.init(size: size)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     override func didMove(to view: SKView) {
-        
-        addChild(gameBoard)
-        
-        button.position = CGPoint(x:self.frame.midX, y:size.height-gameBoard.size.height-120);
-        buttonText.text = "Finished"
-        buttonText.color = UIColor.black
-        buttonText.fontSize = 18
-        button.addChild(buttonText)
-
-        self.addChild(button)
-        let instructionText = SKLabelNode(fontNamed:"Chalkduster")
-        instructionText.text = "\(gameBoard.board.name) place your ships"
-        instructionText.color = UIColor.white
-        instructionText.fontSize = 18
-        instructionText.position = CGPoint(x:self.frame.midX, y:size.height-gameBoard.size.height-70);
-        addChild(instructionText)
+        button = childNode(withName: "button") as? SKSpriteNode
+        buttonText = childNode(withName: "buttonText") as? SKLabelNode
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -70,14 +45,14 @@ class PlacementScene: SKScene {
             return
         }
         let touchLocation = touch.location(in: self)
-        if button.contains(touchLocation) {
-            buttonText.text = "Waiting"
-            battleshipDelegate.placementComplete(board: gameBoard.board)
+        if button!.contains(touchLocation) {
+            buttonText?.text = "Waiting"
+            battleshipDelegate?.placementComplete(board: gameBoard!.board!)
         }else {
             selectShip(position: touchLocation)
             rotateMode = true
-            lastTouchX = Int((touchLocation.x-gameBoard.position.x)/gameBoard.cellSize)
-            lastTouchY = Int((gameBoard.position.y-touchLocation.y)/gameBoard.cellSize)
+            lastTouchX = Int((touchLocation.x-gameBoard!.position.x)/gameBoard!.cellSize!)
+            lastTouchY = Int((gameBoard!.position.y-touchLocation.y)/gameBoard!.cellSize!)
         }
     }
 
@@ -87,8 +62,8 @@ class PlacementScene: SKScene {
         }
         let touchLocation = touch.location(in: self)
         moveSelectedShip(position: touchLocation)
-        let x = Int((touchLocation.x-gameBoard.position.x)/gameBoard.cellSize)
-        let y = Int((gameBoard.position.y-touchLocation.y)/gameBoard.cellSize)
+        let x = Int((touchLocation.x-gameBoard!.position.x)/gameBoard!.cellSize!)
+        let y = Int((gameBoard!.position.y-touchLocation.y)/gameBoard!.cellSize!)
         if lastTouchX != x || lastTouchY != y {
             rotateMode = false
         }
@@ -113,9 +88,9 @@ class PlacementScene: SKScene {
     }
     
     func selectShip(position: CGPoint) {
-        let cellX = Int((position.x-gameBoard.position.x)/gameBoard.cellSize)
-        let cellY = Int((gameBoard.position.y-position.y)/gameBoard.cellSize)
-        selectedShip = gameBoard.board.shipAtPosition(cellX, cellY)
+        let cellX = Int((position.x-gameBoard!.position.x)/gameBoard!.cellSize!)
+        let cellY = Int((gameBoard!.position.y-position.y)/gameBoard!.cellSize!)
+        selectedShip = gameBoard?.board?.shipAtPosition(cellX, cellY)
         if let selectedShip = selectedShip {
             selectedShip.selected = true
             selectedOffsetX = cellX-selectedShip.x
@@ -129,7 +104,7 @@ class PlacementScene: SKScene {
         if let selectedShip = selectedShip {
             if let selectedOffsetX = selectedOffsetX {
                 if let selectedOffsetY = selectedOffsetY {
-                    gameBoard.board.rotateShip(ship: selectedShip, offsetX: selectedOffsetX, offsetY: selectedOffsetY)
+                    gameBoard?.board?.rotateShip(ship: selectedShip, offsetX: selectedOffsetX, offsetY: selectedOffsetY)
                 }
             }
         }
@@ -139,9 +114,9 @@ class PlacementScene: SKScene {
         if let selectedShip = selectedShip {
             if let selectedOffsetX = selectedOffsetX {
                 if let selectedOffsetY = selectedOffsetY {
-                    let cellX = Int((position.x-gameBoard.position.x)/gameBoard.cellSize)
-                    let cellY = Int((gameBoard.position.y-position.y)/gameBoard.cellSize)
-                    gameBoard.board.moveShip(ship: selectedShip, x: cellX-selectedOffsetX, y: cellY-selectedOffsetY)
+                    let cellX = Int((position.x-gameBoard!.position.x)/gameBoard!.cellSize!)
+                    let cellY = Int((gameBoard!.position.y-position.y)/gameBoard!.cellSize!)
+                    gameBoard?.board?.moveShip(ship: selectedShip, x: cellX-selectedOffsetX, y: cellY-selectedOffsetY)
                 }
             }
         }

@@ -7,7 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DC24CAF7229F04CF00D6ED8B /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = DC24CAF6229F04CF00D6ED8B /* GameScene.sks */; };
 		DC285563228C9C0E006B4571 /* BattleshipNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC285562228C9C0E006B4571 /* BattleshipNetwork.swift */; };
+		DC40C87D229FA43D006D0028 /* PlacementScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = DC40C87C229FA43D006D0028 /* PlacementScene.sks */; };
+		DC40C87F229FB0F4006D0028 /* MatchMakingScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = DC40C87E229FB0F4006D0028 /* MatchMakingScene.sks */; };
+		DC40C881229FB43A006D0028 /* GameOverScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = DC40C880229FB43A006D0028 /* GameOverScene.sks */; };
 		DC40F79B228DE10700DE4DC5 /* RandomAIPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC40F79A228DE10700DE4DC5 /* RandomAIPlayer.swift */; };
 		DC40F79D228DE8D000DE4DC5 /* ProbabilityAIPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC40F79C228DE8D000DE4DC5 /* ProbabilityAIPlayer.swift */; };
 		DC65DE282297139C0029B105 /* Explosion.sks in Resources */ = {isa = PBXBuildFile; fileRef = DC65DE272297139C0029B105 /* Explosion.sks */; };
@@ -36,7 +40,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		DC24CAF6229F04CF00D6ED8B /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		DC285562228C9C0E006B4571 /* BattleshipNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BattleshipNetwork.swift; sourceTree = "<group>"; };
+		DC40C87C229FA43D006D0028 /* PlacementScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = PlacementScene.sks; sourceTree = "<group>"; };
+		DC40C87E229FB0F4006D0028 /* MatchMakingScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MatchMakingScene.sks; sourceTree = "<group>"; };
+		DC40C880229FB43A006D0028 /* GameOverScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameOverScene.sks; sourceTree = "<group>"; };
 		DC40F79A228DE10700DE4DC5 /* RandomAIPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomAIPlayer.swift; sourceTree = "<group>"; };
 		DC40F79C228DE8D000DE4DC5 /* ProbabilityAIPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProbabilityAIPlayer.swift; sourceTree = "<group>"; };
 		DC65DE272297139C0029B105 /* Explosion.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Explosion.sks; sourceTree = "<group>"; };
@@ -96,32 +104,36 @@
 		DCC84C232275EA2B00BA0668 /* Battleship */ = {
 			isa = PBXGroup;
 			children = (
-				DCC84CA1227A0EA000BA0668 /* LastHitAIPlayer.swift */,
 				DCC84C242275EA2B00BA0668 /* AppDelegate.swift */,
 				DCC84C832276B1DF00BA0668 /* Array2D.swift */,
+				DCC84C312275EA2E00BA0668 /* Assets.xcassets */,
 				DCC84C892276B40500BA0668 /* BattleshipDelegate.swift */,
+				DC285562228C9C0E006B4571 /* BattleshipNetwork.swift */,
 				DCC84C8D2277801F00BA0668 /* Board.swift */,
 				DCC84C9522798F0200BA0668 /* BoardView.swift */,
+				DC65DE272297139C0029B105 /* Explosion.sks */,
+				DC65DE2D22971A3E0029B105 /* Fire.sks */,
+				DC40C880229FB43A006D0028 /* GameOverScene.sks */,
 				DCC84C992279D3A800BA0668 /* GameOverScene.swift */,
+				DC24CAF6229F04CF00D6ED8B /* GameScene.sks */,
 				DCC84C9322796DDB00BA0668 /* GameScene.swift */,
 				DCC84C2C2275EA2B00BA0668 /* GameViewController.swift */,
+				DCC84C362275EA2E00BA0668 /* Info.plist */,
+				DCC84CA1227A0EA000BA0668 /* LastHitAIPlayer.swift */,
 				DCC84C332275EA2E00BA0668 /* LaunchScreen.storyboard */,
 				DCC84C9F227A090500BA0668 /* LocalNetworking.swift */,
 				DCC84C2E2275EA2B00BA0668 /* Main.storyboard */,
+				DC40C87E229FB0F4006D0028 /* MatchMakingScene.sks */,
 				DCC84C9B2279EF7100BA0668 /* MatchMakingScene.swift */,
 				DCC84CA5227D648000BA0668 /* NetworkPlayer.swift */,
-				DC285562228C9C0E006B4571 /* BattleshipNetwork.swift */,
+				DC40C87C229FA43D006D0028 /* PlacementScene.sks */,
 				DCC84C2A2275EA2B00BA0668 /* PlacementScene.swift */,
 				DCC84CA3227A0EB100BA0668 /* Player.swift */,
+				DC40F79C228DE8D000DE4DC5 /* ProbabilityAIPlayer.swift */,
+				DC40F79A228DE10700DE4DC5 /* RandomAIPlayer.swift */,
 				DCC84C912278038400BA0668 /* Ship.swift */,
 				DCC84C97227995DA00BA0668 /* ShipView.swift */,
-				DCC84C362275EA2E00BA0668 /* Info.plist */,
-				DCC84C312275EA2E00BA0668 /* Assets.xcassets */,
-				DC40F79A228DE10700DE4DC5 /* RandomAIPlayer.swift */,
-				DC40F79C228DE8D000DE4DC5 /* ProbabilityAIPlayer.swift */,
-				DC65DE272297139C0029B105 /* Explosion.sks */,
 				DC65DE2B229719E40029B105 /* Smoke.sks */,
-				DC65DE2D22971A3E0029B105 /* Fire.sks */,
 				DC65DE2F2297A9B50029B105 /* Water.fsh */,
 			);
 			path = Battleship;
@@ -186,11 +198,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				DCC84C302275EA2B00BA0668 /* Main.storyboard in Resources */,
+				DC40C87F229FB0F4006D0028 /* MatchMakingScene.sks in Resources */,
+				DC40C87D229FA43D006D0028 /* PlacementScene.sks in Resources */,
 				DC65DE282297139C0029B105 /* Explosion.sks in Resources */,
 				DC65DE302297A9B50029B105 /* Water.fsh in Resources */,
 				DCC84C322275EA2E00BA0668 /* Assets.xcassets in Resources */,
+				DC24CAF7229F04CF00D6ED8B /* GameScene.sks in Resources */,
 				DC65DE2E22971A3E0029B105 /* Fire.sks in Resources */,
 				DC65DE2C229719E40029B105 /* Smoke.sks in Resources */,
+				DC40C881229FB43A006D0028 /* GameOverScene.sks in Resources */,
 				DCC84C352275EA2E00BA0668 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

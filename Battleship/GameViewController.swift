@@ -40,8 +40,9 @@ class GameViewController: UIViewController, BattleshipDelegate {
         let skView = view as! SKView
         skView.isMultipleTouchEnabled = false
         // Create and configure the scene.
-        let scene = MatchMakingScene(delegate: self, size: skView.bounds.size)
-        scene.scaleMode = .aspectFill
+        let scene = MatchMakingScene(fileNamed: "MatchMakingScene")
+        scene?.setup(delegate: self)
+        scene?.scaleMode = .aspectFit
         matchMakingScene = scene
         // Present the scene.
         skView.presentScene(scene)
@@ -101,11 +102,13 @@ class GameViewController: UIViewController, BattleshipDelegate {
         
         if opponentBoard != nil && myBoard != nil {
             // Create and configure the scene.
-            let scene = GameScene(delegate: self, myBoard: myBoard!, opponentBoard: opponentBoard!,size: skView.bounds.size)
-            scene.scaleMode = .aspectFill
-            
-            // Present the scene.
-            skView.presentScene(scene)
+            if let scene = GameScene(fileNamed: "GameScene") {
+                scene.setup(delegate: self, myBoard: myBoard!, opponentBoard: opponentBoard!)
+                scene.scaleMode = .aspectFit
+                
+                // Present the scene.
+                skView.presentScene(scene)
+            }
         }
     }
     func gameOver(board: Board, won: Bool) {
@@ -132,8 +135,9 @@ class GameViewController: UIViewController, BattleshipDelegate {
         }
         
         // Create and configure the scene.
-        let scene = GameOverScene(delegate: self, size: skView.bounds.size, myBoard: myBoard!, opponentBoard: opponentBoard!, won: !won)
-        scene.scaleMode = .aspectFill
+        let scene = GameOverScene(fileNamed: "GameOverScene")
+        scene?.setup(delegate: self, myBoard: myBoard!, opponentBoard: opponentBoard!, won: !won)
+        scene?.scaleMode = .aspectFit
         
         // Present the scene.
         skView.presentScene(scene)
@@ -142,12 +146,13 @@ class GameViewController: UIViewController, BattleshipDelegate {
 
     private func showPlacementScene(board: Board, ships: [Ship], view: SKView) {
         // Create and configure the scene.
-        let scene = PlacementScene(delegate: self, board: board, ships: ships, size: view.bounds.size)
-        scene.scaleMode = .aspectFill
-        
-        // Present the scene.
-        view.presentScene(scene)
-
+        if let scene = PlacementScene(fileNamed: "PlacementScene") {
+            scene.setup(delegate: self, board: board, ships: ships)
+            scene.scaleMode = .aspectFit
+            
+            // Present the scene.
+            view.presentScene(scene)
+        }
     }
     
     private func createShips() -> [Ship] {

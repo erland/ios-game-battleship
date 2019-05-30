@@ -11,32 +11,25 @@ import GameplayKit
 
 class MatchMakingScene: SKScene {
     
-    let battleshipDelegate: BattleshipDelegate
-    var waitingText : SKLabelNode?
+    var battleshipDelegate: BattleshipDelegate?
+    var instructionText : SKLabelNode?
     var opponents : [SKLabelNode] = []
     
-    init(delegate: BattleshipDelegate, size: CGSize) {
+    func setup(delegate: BattleshipDelegate) {
         self.battleshipDelegate = delegate
-        super.init(size: size)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     override func didMove(to view: SKView) {
-        waitingText = SKLabelNode(fontNamed:"Chalkduster")
-        waitingText?.fontSize = 30
-        waitingText?.position = CGPoint(x: size.width * 0.5, y: size.height * 0.65)
+        instructionText = childNode(withName: "instructionText") as? SKLabelNode
         updateInstructionText()
-        addChild(waitingText!)
-        for i in 0..<5 {
-            let opponent = SKLabelNode(fontNamed:"Chalkduster")
-            opponent.text = ""
-            opponent.fontSize = 20
-            opponent.position = CGPoint(x: size.width * 0.5, y: size.height * 0.55-CGFloat(i)*size.height/15.0)
-            opponents.append(opponent)
-            addChild(opponent)
+
+        enumerateChildNodes(withName: "opponent") {
+            (node, _) in
+            
+            if let node = node as? SKLabelNode {
+                node.text = ""
+                self.opponents.append(node)
+            }
         }
     }
     
@@ -61,10 +54,10 @@ class MatchMakingScene: SKScene {
     }
     
     private func updateInstructionText() {
-        waitingText?.text = "Waiting for opponent"
+        instructionText?.text = "Waiting for opponent"
         for opponent in opponents {
             if opponent.text != "" {
-                waitingText?.text = "Select opponent"
+                instructionText?.text = "Select opponent"
                 break
             }
         }
@@ -75,7 +68,7 @@ class MatchMakingScene: SKScene {
         }
         for opponent in opponents {
             if opponent.frame.contains(touch.location(in: self)) {
-                battleshipDelegate.selectedOpponent(player: opponent.text!)
+                battleshipDelegate?.selectedOpponent(player: opponent.text!)
                 break
             }
         }

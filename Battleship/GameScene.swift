@@ -26,87 +26,47 @@ extension SKAction {
 }
 
 class GameScene: SKScene, BoardObserver {
-    let battleshipDelegate: BattleshipDelegate
-    let opponentBoardView: BoardView
-    let myBoardView: BoardView
+    var battleshipDelegate: BattleshipDelegate?
+    var opponentBoardView: BoardView?
+    var myBoardView: BoardView?
     var hitTexture: SKTexture?
     var missTexture: SKTexture?
     var smallHitTexture: SKTexture?
     var smallMissTexture: SKTexture?
-    let instructionText: SKLabelNode
+    var instructionText: SKLabelNode?
     var waitingForShoot: Bool = true
     var opponentDestroyedShips : Int = 0
-    let opponentStandingsText: SKLabelNode
-    let myStandingsText: SKLabelNode
-    let opponentStandingsLabel: SKLabelNode
-    let myStandingsLabel: SKLabelNode
+    var opponentStandingsText: SKLabelNode?
+    var myStandingsText: SKLabelNode?
+    var opponentStandingsLabel: SKLabelNode?
+    var myStandingsLabel: SKLabelNode?
 
-    init(delegate: BattleshipDelegate, myBoard: Board, opponentBoard: Board, size: CGSize) {
+    func setup(delegate: BattleshipDelegate, myBoard: Board, opponentBoard: Board) {
         self.battleshipDelegate = delegate
-        let margin = size.width/10
-        let cellSize = (size.width-margin*2)/CGFloat(opponentBoard.width)
         
-        self.opponentBoardView = BoardView(board: opponentBoard, cellSize: cellSize, scale: 1.0)
-        opponentBoardView.anchorPoint = CGPoint(x: 0, y: 1)
-        opponentBoardView.position = CGPoint(x: margin,y: size.height-margin/2-30)
+        self.opponentBoardView = childNode(withName: "opponentBoard") as? BoardView
+        self.opponentBoardView?.setup(board: opponentBoard)
+        self.myBoardView = childNode(withName: "myBoard") as? BoardView
+        self.myBoardView?.setup(board: myBoard, showShootMarking: true)
         
-        self.myBoardView = BoardView(board: myBoard, cellSize: cellSize/2.5, scale: 0.5, showShootMarking: true)
-        myBoardView.anchorPoint = CGPoint(x: 0, y: 1)
-        myBoardView.position = CGPoint(x: size.width/2-myBoardView.size.width/2,y: size.height-margin/2-30-opponentBoardView.size.height-margin/2-30)
-        
-        instructionText = SKLabelNode(fontNamed:"Chalkduster")
-        instructionText.color = UIColor.white
-        instructionText.fontSize = 18
-        instructionText.position = CGPoint(x:size.width/2.0, y:size.height-30);
+        instructionText = childNode(withName: "instructionText") as? SKLabelNode
 
-        myStandingsText = SKLabelNode(fontNamed:"Chalkduster")
-        myStandingsText.color = UIColor.white
-        myStandingsText.fontSize = cellSize/2
-        myStandingsText.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.left
-        myStandingsText.position = CGPoint(x: margin,y: myBoardView.position.y-myBoardView.size.height/2-cellSize);
-        myStandingsLabel = SKLabelNode(fontNamed:"Chalkduster")
-        myStandingsLabel.color = UIColor.white
-        myStandingsLabel.fontSize = cellSize/2
-        myStandingsLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.left
-        myStandingsLabel.position = CGPoint(x: margin,y: myBoardView.position.y-myBoardView.size.height/2);
-        myStandingsLabel.text = "You:"
+        myStandingsText = childNode(withName: "myStandingsText") as? SKLabelNode
+        opponentStandingsText = childNode(withName: "opponentStandingsText") as? SKLabelNode
 
-        opponentStandingsText = SKLabelNode(fontNamed:"Chalkduster")
-        opponentStandingsText.color = UIColor.white
-        opponentStandingsText.fontSize = cellSize/2
-        opponentStandingsText.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.right
-        opponentStandingsText.position = CGPoint(x: size.width-margin,y: myBoardView.position.y-myBoardView.size.height/2-cellSize);
-        opponentStandingsLabel = SKLabelNode(fontNamed:"Chalkduster")
-        opponentStandingsLabel.color = UIColor.white
-        opponentStandingsLabel.fontSize = cellSize/2
-        opponentStandingsLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.right
-        opponentStandingsLabel.position = CGPoint(x: size.width-margin,y: myBoardView.position.y-myBoardView.size.height/2);
-        opponentStandingsLabel.text = "Him/Her:"
-
-        super.init(size: size)
-        myBoardView.board.attachObserver(self)
+        myBoardView?.board?.attachObserver(self)
     }
     deinit {
-        myBoardView.board.detachObserver(self)
+        myBoardView?.board?.detachObserver(self)
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     override func didMove(to view: SKView) {
         print("Moved to game scene")
-        opponentBoardView.hideShips(hide: true)
-        addChild(opponentBoardView)
-        addChild(myBoardView)
+        opponentBoardView?.hideShips(hide: true)
         
-        instructionText.text = "Fire your canon"
-        addChild(instructionText)
-        addChild(myStandingsText)
-        addChild(myStandingsLabel)
-        addChild(opponentStandingsText)
-        addChild(opponentStandingsLabel)
-        myStandingsText.text = "\(opponentBoardView.board.ships.count)/\(myBoardView.board.ships.count)"
-        opponentStandingsText.text = "\(opponentDestroyedShips)/\(myBoardView.board.ships.count)"
+        instructionText?.text = "Fire your canon"
+        myStandingsText?.text = "\(opponentBoardView!.board!.ships.count)/\(myBoardView!.board!.ships.count)"
+        opponentStandingsText?.text = "\(opponentDestroyedShips)/\(myBoardView!.board!.ships.count)"
 
     }
     func shipAdded(ship: Ship) {
@@ -119,8 +79,8 @@ class GameScene: SKScene, BoardObserver {
     
     func shootAt(x: Int, y: Int, hit: Bool) {
         if hit {
-            self.opponentBoardView.run(SKAction.shake(duration: 0.5, amplitudeX: opponentBoardView.cellSize/2, amplitudeY: opponentBoardView.cellSize/2))
-            self.myBoardView.run(SKAction.shake(duration: 0.5, amplitudeX: myBoardView.cellSize/2, amplitudeY: myBoardView.cellSize/2))
+            self.opponentBoardView?.run(SKAction.shake(duration: 0.5, amplitudeX: opponentBoardView!.cellSize!/2, amplitudeY: opponentBoardView!.cellSize!/2))
+            self.myBoardView?.run(SKAction.shake(duration: 0.5, amplitudeX: myBoardView!.cellSize!/2, amplitudeY: myBoardView!.cellSize!/2))
         }
     }
     
@@ -133,26 +93,26 @@ class GameScene: SKScene, BoardObserver {
     }
     
     func readyForShoot() {
-        instructionText.text = "Fire your canon"
+        instructionText?.text = "Fire your canon"
         waitingForShoot = true
     }
     
     func opponentShoot(x: Int, y: Int) {
-        let hitShip = myBoardView.board.shipAtPosition(x, y)
+        let hitShip = myBoardView?.board?.shipAtPosition(x, y)
         let hit = (hitShip != nil)
         hitShip?.shoot(x, y)
-        myBoardView.board.registerShoot(x: x, y: y, hit: hit)
+        myBoardView?.board?.registerShoot(x: x, y: y, hit: hit)
         
         if let hitShip = hitShip {
             if hitShip.isDestroyed() {
                 opponentDestroyedShips = opponentDestroyedShips + 1
-                opponentStandingsText.text = "\(opponentDestroyedShips)/\(myBoardView.board.ships.count)"
-                battleshipDelegate.shootResult(playerName: myBoardView.board.name, x: x, y: y, hit: true, destroyedShip: hitShip)
+                opponentStandingsText?.text = "\(opponentDestroyedShips)/\(myBoardView!.board!.ships.count)"
+                battleshipDelegate?.shootResult(playerName: myBoardView!.board!.name, x: x, y: y, hit: true, destroyedShip: hitShip)
             }else {
-                battleshipDelegate.shootResult(playerName: myBoardView.board.name, x: x, y: y, hit: true, destroyedShip: nil)
+                battleshipDelegate?.shootResult(playerName: myBoardView!.board!.name, x: x, y: y, hit: true, destroyedShip: nil)
             }
         }else {
-            battleshipDelegate.shootResult(playerName: myBoardView.board.name, x: x, y: y, hit: false, destroyedShip: nil)
+            battleshipDelegate?.shootResult(playerName: myBoardView!.board!.name, x: x, y: y, hit: false, destroyedShip: nil)
         }
     }
         
@@ -160,24 +120,24 @@ class GameScene: SKScene, BoardObserver {
         if !waitingForShoot {
             return
         }
-        let cellX = Int((position.x-opponentBoardView.position.x)/opponentBoardView.cellSize)
-        let cellY = Int((opponentBoardView.position.y-position.y)/opponentBoardView.cellSize)
-        if cellX>=0 && cellX<opponentBoardView.board.width && cellY>=0 && cellY<opponentBoardView.board.height {
-            if opponentBoardView.board.shoots[cellX,cellY] == nil {
+        let cellX = Int((position.x-opponentBoardView!.position.x)/opponentBoardView!.cellSize!)
+        let cellY = Int((opponentBoardView!.position.y-position.y)/opponentBoardView!.cellSize!)
+        if cellX>=0 && cellX<opponentBoardView!.board!.width && cellY>=0 && cellY<opponentBoardView!.board!.height {
+            if opponentBoardView!.board!.shoots[cellX,cellY] == nil {
                 waitingForShoot = false
-                instructionText.text = "Waiting for opponent"
-                battleshipDelegate.shoot(playerName: myBoardView.board.name, x: cellX, y: cellY)
+                instructionText?.text = "Waiting for opponent"
+                battleshipDelegate?.shoot(playerName: myBoardView!.board!.name, x: cellX, y: cellY)
             }
         }
     }
     
     func shootResult(x: Int, y: Int, hit: Bool) {
-        print("Checking if gameOver count=\(opponentBoardView.board.ships.count) and allShipsDestroyed=\(opponentBoardView.board.isAllShipsDestroyed())")
+        print("Checking if gameOver count=\(opponentBoardView!.board!.ships.count) and allShipsDestroyed=\(opponentBoardView!.board!.isAllShipsDestroyed())")
         if hit {
-            myStandingsText.text = "\(opponentBoardView.board.ships.count)/\(myBoardView.board.ships.count)"
+            myStandingsText?.text = "\(opponentBoardView!.board!.ships.count)/\(myBoardView!.board!.ships.count)"
         }
-        if opponentBoardView.board.ships.count == myBoardView.board.ships.count && opponentBoardView.board.isAllShipsDestroyed() {
-            battleshipDelegate.gameOver(board: myBoardView.board, won: true)
+        if opponentBoardView!.board!.ships.count == myBoardView!.board!.ships.count && opponentBoardView!.board!.isAllShipsDestroyed() {
+            battleshipDelegate?.gameOver(board: myBoardView!.board!, won: true)
         }
 
     }

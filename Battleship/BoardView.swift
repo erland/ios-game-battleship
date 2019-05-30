@@ -10,33 +10,29 @@ import SpriteKit
 
 class BoardView : SKSpriteNode, BoardObserver {
     
-    let board: Board
-    let cellSize: CGFloat
-    let scale: CGFloat
-    let hitTexture : SKTexture?
-    let missTexture : SKTexture?
-    let showShootMarking: Bool
+    var board: Board?
+    var cellSize: CGFloat?
+    var scale: CGFloat?
+    var hitTexture : SKTexture?
+    var missTexture : SKTexture?
+    var showShootMarking: Bool = false
     var lastShootMarking : SKShapeNode?
-    
-    convenience init(board: Board, cellSize: CGFloat, scale: CGFloat) {
-        self.init(board: board, cellSize: cellSize, scale: scale, showShootMarking: false)
-    }
 
-    init(board: Board, cellSize: CGFloat, scale: CGFloat, showShootMarking: Bool) {
-        self.cellSize = cellSize
+    func setup(board: Board, showShootMarking: Bool = false) {
+        self.cellSize = size.width/CGFloat(board.width)
+        print("\(size.width) with \(board.width) gives cellSize=\(cellSize!)")
         self.board = board
-        self.scale = cellSize/50.0
+        self.scale = cellSize!/50.0
         self.showShootMarking = showShootMarking
-        let texture = BoardView.createBoardTexture(x: board.width, y: board.height, cellSize: cellSize)
-        let gridTexture = BoardView.createBoardGridTexture(x: board.width, y: board.height, cellSize: cellSize)
-        let boardWidth = CGFloat(board.width)*cellSize
-        let boardHeight = CGFloat(board.width)*cellSize
+        let texture = BoardView.createBoardTexture(x: board.width, y: board.height, cellSize: cellSize!)
+        let gridTexture = BoardView.createBoardGridTexture(x: board.width, y: board.height, cellSize: cellSize!)
 
-        self.hitTexture = BoardView.createHitTexture(cellSize: cellSize, strokeColor: UIColor.green, fillColor: UIColor.green)
+        self.hitTexture = BoardView.createHitTexture(cellSize: cellSize!, strokeColor: UIColor.green, fillColor: UIColor.green)
         let missColor = UIColor(red: 0.5, green: 0.7, blue: 0.9, alpha: 0.5)
-        self.missTexture = BoardView.createHitTexture(cellSize: cellSize, strokeColor: missColor, fillColor: missColor)
+        self.missTexture = BoardView.createHitTexture(cellSize: cellSize!, strokeColor: missColor, fillColor: missColor)
 
-        super.init(texture: texture, color: UIColor.black, size: CGSize(width: boardWidth, height: boardHeight))
+        self.texture = texture
+        self.color = UIColor.black
         let gridSprite = SKSpriteNode(texture: gridTexture)
         gridSprite.anchorPoint = CGPoint(x: 0.0,y: 1.0)
         gridSprite.position = CGPoint(x: -1.0, y: 1.0)
@@ -54,14 +50,11 @@ class BoardView : SKSpriteNode, BoardObserver {
         board.attachObserver(self)
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
     private class func createBoardTexture(x: Int, y: Int, cellSize: CGFloat) -> SKTexture? {
         let boardWidth = CGFloat(x)*cellSize
         let boardHeight = CGFloat(y)*cellSize
         let texture = SKTexture(imageNamed: "water")
+        print("Creating grid texture with size \(boardWidth),\(boardHeight)")
         let shape = SKSpriteNode.init(texture: texture, size: CGSize(width: boardWidth, height: boardHeight))
         let view = SKView(frame: CGRect(x: 0, y: 0, width: boardWidth, height: boardHeight))
         return view.texture(from: shape)
@@ -112,7 +105,7 @@ class BoardView : SKSpriteNode, BoardObserver {
     }
 
     func shipAdded(ship: Ship) {
-        let shipView = ShipView(ship: ship, cellSize: cellSize)
+        let shipView = ShipView(ship: ship, cellSize: cellSize!)
         shipView.anchorPoint = CGPoint(x: 1.0/(CGFloat(ship.length)*2.0), y: 0.5)
         shipView.name = "ship"
         shipView.zPosition = 10
@@ -130,8 +123,8 @@ class BoardView : SKSpriteNode, BoardObserver {
             if let lastShootMarking = self.lastShootMarking {
                 lastShootMarking.removeFromParent()
             }
-            lastShootMarking = SKShapeNode.init(rectOf: CGSize(width: cellSize, height: cellSize))
-            lastShootMarking?.position = CGPoint(x: CGFloat(x)*cellSize+cellSize/2, y: -CGFloat(y)*cellSize-cellSize/2)
+            lastShootMarking = SKShapeNode.init(rectOf: CGSize(width: cellSize!, height: cellSize!))
+            lastShootMarking?.position = CGPoint(x: CGFloat(x)*cellSize!+cellSize!/2, y: -CGFloat(y)*cellSize!-cellSize!/2)
             lastShootMarking?.zPosition=15
             if hit {
                 lastShootMarking?.strokeColor = UIColor.yellow
@@ -159,17 +152,17 @@ class BoardView : SKSpriteNode, BoardObserver {
                 let fire = NSKeyedUnarchiver.unarchiveObject(withFile: firePath) as? SKEmitterNode,
                 let smoke = NSKeyedUnarchiver.unarchiveObject(withFile: smokePath) as? SKEmitterNode {
                 
-                explosion.position = CGPoint(x: CGFloat(x)*cellSize+cellSize/2,
-                                             y: -CGFloat(y)*cellSize-cellSize/2)
-                smoke.position = CGPoint(x: CGFloat(x)*cellSize+cellSize/2,
-                                         y: -CGFloat(y)*cellSize-cellSize/2)
-                fire.position = CGPoint(x: CGFloat(x)*cellSize+cellSize/2,
-                                         y: -CGFloat(y)*cellSize-cellSize/2)
-                fire.setScale(0.75*scale)
+                explosion.position = CGPoint(x: CGFloat(x)*cellSize!+cellSize!/2,
+                                             y: -CGFloat(y)*cellSize!-cellSize!/2)
+                smoke.position = CGPoint(x: CGFloat(x)*cellSize!+cellSize!/2,
+                                         y: -CGFloat(y)*cellSize!-cellSize!/2)
+                fire.position = CGPoint(x: CGFloat(x)*cellSize!+cellSize!/2,
+                                         y: -CGFloat(y)*cellSize!-cellSize!/2)
+                fire.setScale(0.75*scale!)
                 fire.zPosition = 20
-                explosion.setScale(0.75*scale)
+                explosion.setScale(0.75*scale!)
                 explosion.zPosition = 20
-                smoke.setScale(0.75*scale)
+                smoke.setScale(0.75*scale!)
                 smoke.zPosition = 20
 
                 addChild(smoke)
@@ -184,8 +177,8 @@ class BoardView : SKSpriteNode, BoardObserver {
                 hitSprite = SKSpriteNode(texture: missTexture)
             }
             hitSprite!.anchorPoint = CGPoint(x: 0, y: 1)
-            hitSprite!.position = CGPoint(x: CGFloat(x)*cellSize,
-                                         y: -CGFloat(y)*cellSize)
+            hitSprite!.position = CGPoint(x: CGFloat(x)*cellSize!,
+                                         y: -CGFloat(y)*cellSize!)
             hitSprite!.zPosition = 20
             addChild(hitSprite!)
         }
