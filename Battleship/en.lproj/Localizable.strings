@@ -1,0 +1,28 @@
+/* 
+  Localizable.strings
+  Battleship
+
+  Created by Erland Isaksson on 2019-08-08.
+  Copyright © 2019 Erland Isaksson. All rights reserved.
+*/
+"placeYourShips" = "Place your ships";
+"finished" = "Finished";
+"waiting" = "Waiting";
+"fireYourCannon" = "Fire your cannon";
+"you" = "You";
+"himHer" = "Him/Her";
+"success" = "Success";
+"youWon" = "You won!";
+"youLost" = "You lost";
+"itIsADraw" = "It is a draw";
+"gameOver" = "Game Over";
+"waitingForOpponent" = "Waiting for opponent";
+"selectOpponent" = "Select opponent";
+"placeYourMarker" = "Place your marker";
+"veryEasy" = "very easy";
+"easy" = "easy";
+"normal" = "normal";
+"hard" = "hard";
+"extreme" = "extreme";
+"yourHits" = "Your hits";
+"opponentHits" = "Opponent hits";

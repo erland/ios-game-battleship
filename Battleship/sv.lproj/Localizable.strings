@@ -1,0 +1,26 @@
+/* 
+  Localizable.strings
+  Battleship
+
+  Created by Erland Isaksson on 2019-08-08.
+  Copyright © 2019 Erland Isaksson. All rights reserved.
+*/
+"placeYourShips" = "Placera dina skepp";
+"finished" = "Klart";
+"waiting" = "Väntar";
+"fireYourCannon" = "Skjut med din kanon";
+"you" = "Du";
+"himHer" = "Han/Hon";
+"success" = "Grattis";
+"youWon" = "Du vann!";
+"youLost" = "Du förlorade";
+"gameOver" = "Game Over";
+"waitingForOpponent" = "Väntar på motståndare";
+"selectOpponent" = "Välj motståndare";
+"veryEasy" = "mycket enkel";
+"easy" = "enkel";
+"normal" = "normal";
+"hard" = "svår";
+"extreme" = "mycket svår";
+"yourHits" = "Dina träffar";
+"opponentHits" = "Moståndarens träffar";

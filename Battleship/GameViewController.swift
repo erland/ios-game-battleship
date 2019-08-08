@@ -46,12 +46,12 @@ class GameViewController: UIViewController, BattleshipDelegate {
         matchMakingScene = scene
         // Present the scene.
         skView.presentScene(scene)
-        randomAIPlayer = RandomAIPlayer(name: "AI (very easy)")
-        matchMakingScene?.addOpponent(name: "AI (very easy)")
-        lastHitAIPlayer = LastHitAIPlayer(name: "AI (easy)")
-        matchMakingScene?.addOpponent(name: "AI (easy)")
-        probabilityAIPlayer = ProbabilityAIPlayer(name: "AI (normal)")
-        matchMakingScene?.addOpponent(name: "AI (normal)")
+        randomAIPlayer = RandomAIPlayer(name: "AI (\(NSLocalizedString("veryEasy", comment: "veryEasy")))")
+        matchMakingScene?.addOpponent(name: "AI (\(NSLocalizedString("veryEasy", comment: "veryEasy")))")
+        lastHitAIPlayer = LastHitAIPlayer(name: "AI (\(NSLocalizedString("easy", comment: "easy")))")
+        matchMakingScene?.addOpponent(name: "AI (\(NSLocalizedString("easy", comment: "easy")))")
+        probabilityAIPlayer = ProbabilityAIPlayer(name: "AI (\(NSLocalizedString("normal", comment: "normal")))")
+        matchMakingScene?.addOpponent(name: "AI (\(NSLocalizedString("normal", comment: "normal")))")
         if let network = network {
             for player in network.players {
                 matchMakingScene?.addOpponent(name: player)
@@ -166,11 +166,11 @@ class GameViewController: UIViewController, BattleshipDelegate {
     
     func selectedOpponent(player: String) {
         matchMakingScene = nil
-        if player == "AI (very easy)" {
+        if player == "AI (\(NSLocalizedString("veryEasy", comment: "veryEasy")))" {
             opponentPlayer = randomAIPlayer
-        }else if player == "AI (easy)" {
+        }else if player == "AI (\(NSLocalizedString("easy", comment: "easy")))" {
             opponentPlayer = lastHitAIPlayer
-        }else if player == "AI (normal)" {
+        }else if player == "AI (\(NSLocalizedString("normal", comment: "normal")))" {
             opponentPlayer = probabilityAIPlayer
         }else {
             opponentPlayer = NetworkPlayer(network: network!, name: player)

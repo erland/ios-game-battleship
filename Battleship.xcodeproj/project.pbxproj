@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		DC24CAF7229F04CF00D6ED8B /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = DC24CAF6229F04CF00D6ED8B /* GameScene.sks */; };
 		DC285563228C9C0E006B4571 /* BattleshipNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC285562228C9C0E006B4571 /* BattleshipNetwork.swift */; };
+		DC3DBD8822FC660C002E0B99 /* SKScene+Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3DBD8722FC660C002E0B99 /* SKScene+Localization.swift */; };
+		DC3DBD8922FC684B002E0B99 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = DC3DBD8B22FC684B002E0B99 /* Localizable.strings */; };
 		DC40C87D229FA43D006D0028 /* PlacementScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = DC40C87C229FA43D006D0028 /* PlacementScene.sks */; };
 		DC40C87F229FB0F4006D0028 /* MatchMakingScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = DC40C87E229FB0F4006D0028 /* MatchMakingScene.sks */; };
 		DC40C881229FB43A006D0028 /* GameOverScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = DC40C880229FB43A006D0028 /* GameOverScene.sks */; };
@@ -42,6 +44,9 @@
 /* Begin PBXFileReference section */
 		DC24CAF6229F04CF00D6ED8B /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		DC285562228C9C0E006B4571 /* BattleshipNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BattleshipNetwork.swift; sourceTree = "<group>"; };
+		DC3DBD8722FC660C002E0B99 /* SKScene+Localization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SKScene+Localization.swift"; sourceTree = "<group>"; };
+		DC3DBD8A22FC684B002E0B99 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		DC3DBD8C22FC685D002E0B99 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
 		DC40C87C229FA43D006D0028 /* PlacementScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = PlacementScene.sks; sourceTree = "<group>"; };
 		DC40C87E229FB0F4006D0028 /* MatchMakingScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MatchMakingScene.sks; sourceTree = "<group>"; };
 		DC40C880229FB43A006D0028 /* GameOverScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameOverScene.sks; sourceTree = "<group>"; };
@@ -135,6 +140,8 @@
 				DCC84C97227995DA00BA0668 /* ShipView.swift */,
 				DC65DE2B229719E40029B105 /* Smoke.sks */,
 				DC65DE2F2297A9B50029B105 /* Water.fsh */,
+				DC3DBD8B22FC684B002E0B99 /* Localizable.strings */,
+				DC3DBD8722FC660C002E0B99 /* SKScene+Localization.swift */,
 			);
 			path = Battleship;
 			sourceTree = "<group>";
@@ -181,6 +188,7 @@
 			knownRegions = (
 				en,
 				Base,
+				sv,
 			);
 			mainGroup = DCC84C182275EA2B00BA0668;
 			productRefGroup = DCC84C222275EA2B00BA0668 /* Products */;
@@ -198,6 +206,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DCC84C302275EA2B00BA0668 /* Main.storyboard in Resources */,
+				DC3DBD8922FC684B002E0B99 /* Localizable.strings in Resources */,
 				DC40C87F229FB0F4006D0028 /* MatchMakingScene.sks in Resources */,
 				DC40C87D229FA43D006D0028 /* PlacementScene.sks in Resources */,
 				DC65DE282297139C0029B105 /* Explosion.sks in Resources */,
@@ -235,6 +244,7 @@
 				DCC84CA0227A090500BA0668 /* LocalNetworking.swift in Sources */,
 				DCC84C8E2277801F00BA0668 /* Board.swift in Sources */,
 				DCC84CA2227A0EA000BA0668 /* LastHitAIPlayer.swift in Sources */,
+				DC3DBD8822FC660C002E0B99 /* SKScene+Localization.swift in Sources */,
 				DCC84CA4227A0EB100BA0668 /* Player.swift in Sources */,
 				DCC84C252275EA2B00BA0668 /* AppDelegate.swift in Sources */,
 			);
@@ -243,6 +253,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		DC3DBD8B22FC684B002E0B99 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DC3DBD8A22FC684B002E0B99 /* en */,
+				DC3DBD8C22FC685D002E0B99 /* sv */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		DCC84C2E2275EA2B00BA0668 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -266,6 +285,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -327,6 +347,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";

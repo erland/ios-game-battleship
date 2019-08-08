@@ -15,6 +15,11 @@ class GameOverScene: SKScene {
     var opponentBoardView: BoardView?
     var won: Bool = false
     
+    
+    override func sceneDidLoad() {
+        localize()
+    }
+
     func setup(delegate: BattleshipDelegate, myBoard: Board, opponentBoard: Board, won: Bool) {
         self.battleshipDelegate = delegate
         self.won = won
@@ -31,11 +36,11 @@ class GameOverScene: SKScene {
 
         let winnerText = childNode(withName: "winnerText") as? SKLabelNode
         if won {
-            gameOverText?.text = "Success"
-            winnerText?.text = "You won"
+            gameOverText?.text = NSLocalizedString("success", comment: "success")
+            winnerText?.text = NSLocalizedString("youWon", comment: "youWon")
         }else {
-            gameOverText?.text = "Game Over"
-            winnerText?.text = "You lost"
+            gameOverText?.text = NSLocalizedString("gameOver", comment: "gameOver")
+            winnerText?.text = NSLocalizedString("youLost", comment: "youLost")
         }
     }
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

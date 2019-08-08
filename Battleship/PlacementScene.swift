@@ -26,6 +26,10 @@ class PlacementScene: SKScene {
     
     let gridSize = 10
     
+    override func sceneDidLoad() {
+        localize()
+    }
+    
     func setup(delegate: BattleshipDelegate, board: Board, ships: [Ship]) {
         battleshipDelegate = delegate
         gameBoard = childNode(withName: "board") as? BoardView
@@ -46,7 +50,7 @@ class PlacementScene: SKScene {
         }
         let touchLocation = touch.location(in: self)
         if button!.contains(touchLocation) {
-            buttonText?.text = "Waiting"
+            buttonText?.text = NSLocalizedString("waiting", comment: "waiting")
             battleshipDelegate?.placementComplete(board: gameBoard!.board!)
         }else {
             selectShip(position: touchLocation)

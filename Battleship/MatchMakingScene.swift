@@ -15,6 +15,10 @@ class MatchMakingScene: SKScene {
     var instructionText : SKLabelNode?
     var opponents : [SKLabelNode] = []
     
+    override func sceneDidLoad() {
+        localize()
+    }
+    
     func setup(delegate: BattleshipDelegate) {
         self.battleshipDelegate = delegate
     }
@@ -54,10 +58,10 @@ class MatchMakingScene: SKScene {
     }
     
     private func updateInstructionText() {
-        instructionText?.text = "Waiting for opponent"
+        instructionText?.text = NSLocalizedString("waitingForOpponent", comment: "waitingForOpponent")
         for opponent in opponents {
             if opponent.text != "" {
-                instructionText?.text = "Select opponent"
+                instructionText?.text = NSLocalizedString("selectOpponent", comment: "selectOpponent")
                 break
             }
         }

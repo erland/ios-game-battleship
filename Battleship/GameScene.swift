@@ -41,6 +41,11 @@ class GameScene: SKScene, BoardObserver {
     var opponentStandingsLabel: SKLabelNode?
     var myStandingsLabel: SKLabelNode?
 
+    
+    override func sceneDidLoad() {
+        localize()
+    }
+
     func setup(delegate: BattleshipDelegate, myBoard: Board, opponentBoard: Board) {
         self.battleshipDelegate = delegate
         
@@ -64,7 +69,7 @@ class GameScene: SKScene, BoardObserver {
         print("Moved to game scene")
         opponentBoardView?.hideShips(hide: true)
         
-        instructionText?.text = "Fire your canon"
+        instructionText?.text = NSLocalizedString("fireYourCannon", comment: "fireYourCannon")
         myStandingsText?.text = "\(opponentBoardView!.board!.ships.count)/\(myBoardView!.board!.ships.count)"
         opponentStandingsText?.text = "\(opponentDestroyedShips)/\(myBoardView!.board!.ships.count)"
 
@@ -93,7 +98,7 @@ class GameScene: SKScene, BoardObserver {
     }
     
     func readyForShoot() {
-        instructionText?.text = "Fire your canon"
+        instructionText?.text = NSLocalizedString("fireYourCannon", comment: "fireYourCannon")
         waitingForShoot = true
     }
     
@@ -125,7 +130,7 @@ class GameScene: SKScene, BoardObserver {
         if cellX>=0 && cellX<opponentBoardView!.board!.width && cellY>=0 && cellY<opponentBoardView!.board!.height {
             if opponentBoardView!.board!.shoots[cellX,cellY] == nil {
                 waitingForShoot = false
-                instructionText?.text = "Waiting for opponent"
+                instructionText?.text = NSLocalizedString("waitingForOpponent", comment: "waitingForOpponent")
                 battleshipDelegate?.shoot(playerName: myBoardView!.board!.name, x: cellX, y: cellY)
             }
         }
